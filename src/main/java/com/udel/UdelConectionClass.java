@@ -12,7 +12,7 @@ public class UdelConectionClass {
     private DataTakerClass AllData = new DataTakerClass();
     private List<Integer> InitMass = new ArrayList<>();
     private Map<String, Object> DataMap = new HashMap<>();
-    private Map<String, Double> ItemToCosts = new HashMap<>();
+    private Map<Integer, Map<String, Double>> ItemToCosts = new HashMap<>();
 
     public UdelConectionClass() {}
 

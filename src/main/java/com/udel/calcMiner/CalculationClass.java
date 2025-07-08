@@ -18,14 +18,14 @@ import com.udel.dataMiner.dataModel.tabelsForCalc.naturals.OnlyProcent;
 public class CalculationClass {
     private Map<Integer, Object> IakData;
     private Map<String, Object> ParsedData;
-    private Map<String, Double> ItemsAndCosts = new HashMap<>();
+    private Map<Integer ,Map<String, Double>> ItemsAndCosts = new HashMap<>();
 
     public CalculationClass(Map<Integer, Object> IakData, Map<String, Object> ParsedData){
         this.IakData = IakData;
         this.ParsedData = ParsedData;
     }
 
-    public Map<String, Double> StartAllCalculations(){
+    public Map<Integer ,Map<String, Double>> StartAllCalculations(){
         Set<Integer> KeysFromIak = IakData.keySet();
         List<String> KeysFromParsedData = new ArrayList<>();
         List<String> ItemsList = new ArrayList<>();
@@ -100,11 +100,13 @@ public class CalculationClass {
                             }
                         }
                     }
+                    ItemsAndCosts.put(IakKey, new HashMap<>());
+                    Map<String, Double> tempItems = new HashMap<>();
+                    for (int i = 0; i < ItemsList.size(); i++) 
+                        tempItems.put(ItemsList.get(i),  NaturaList.get(i) * CostsList.get(i));
+                    ItemsAndCosts.get(IakKey).putAll(tempItems);
                 }
             }
-
-            for (int i = 0; i < ItemsList.size(); i++) 
-                ItemsAndCosts.put(ItemsList.get(i),  NaturaList.get(i) * CostsList.get(i));
         }
         return ItemsAndCosts;
     }
@@ -112,8 +114,11 @@ public class CalculationClass {
     @Override
     public String toString(){
         String output = "";
-        for (String key : ItemsAndCosts.keySet()) {
-            output += key + " - " + ItemsAndCosts.get(key) + "\n";
+        for (Integer key : ItemsAndCosts.keySet()) {
+            output += "id - " + key + "\n";
+            for (String ItemKey : ItemsAndCosts.get(key).keySet())
+                output += "\t " + ItemKey + " - " + ItemsAndCosts.get(key).get(ItemKey) + "\n";
+            
         }
         return output;
     }

@@ -24,6 +24,4 @@ public class Plant {
         this.PlantGroup = PlantGroup;
         this.Items = Items;
     }
-
-
 }

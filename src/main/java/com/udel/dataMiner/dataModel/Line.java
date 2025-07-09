@@ -27,11 +27,4 @@ public class Line {
         this.Modes = Modes;
         this.Items = Items;
     }
-
-    
-    
-
-
-    
-    
 }

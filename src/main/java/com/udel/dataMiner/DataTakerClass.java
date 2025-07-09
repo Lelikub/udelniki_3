@@ -9,10 +9,6 @@ import com.udel.dataMiner.dataModel.Item;
 import com.udel.dataMiner.dataModel.Line;
 import com.udel.dataMiner.dataModel.Mode;
 import com.udel.dataMiner.dataModel.Plant;
-import com.udel.dataMiner.dataModel.enums.Condition;
-import com.udel.dataMiner.dataModel.enums.PlantGroup;
-import com.udel.dataMiner.dataModel.enums.TypeOfCost;
-import com.udel.dataMiner.dataModel.enums.TypeOfNatural;
 import com.udel.dataMiner.dataModel.tabelsForCalc.costs.CostAdKoef;
 import com.udel.dataMiner.dataModel.tabelsForCalc.costs.Inflation;
 import com.udel.dataMiner.dataModel.tabelsForCalc.costs.OnlyCost;
@@ -31,7 +27,11 @@ public class DataTakerClass {
     private List<Inflation> Inflations;    
 
     public DataTakerClass(){
-        TestDataFunc();
+        //TestDataFunc();
+    }
+
+    private void DataTakerFromSQlite(){
+
     }
 
     public Map<String, Object> ParsinById(List<Integer> InitMass){
@@ -54,7 +54,7 @@ public class DataTakerClass {
         return data;
     }
 
-    private void TestDataFunc(){
+    /*private void TestDataFunc(){
         Plants = new ArrayList<>();
         Lines = new ArrayList<>();
         Modes = new ArrayList<>();
@@ -228,5 +228,5 @@ public class DataTakerClass {
         for (int i = 0; i < 12; i++) {
             Inflations.add(new Inflation(i, "Инфляция", i + "", 1.0 + i * 0.03));
         }
-    }
+    }*/
 }

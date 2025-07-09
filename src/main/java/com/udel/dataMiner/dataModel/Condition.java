@@ -5,14 +5,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
-
 @Entity
-@Table(name = "modes")
-public class Mode {
+@Table(name = "conditions")
+public class  Condition{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,16 +19,15 @@ public class Mode {
     @Column(name = "name")
     public String Name;
 
-    @ManyToOne
-    @JoinColumn(name = "line_id")
-    public Line Line;
+    @Column(name = "description")
+    public String Description;
 
-    public Mode() {
+    public Condition() {
     }
 
-    public Mode(int Id, String Name, Line Line) {
+    public Condition(int Id, String Name, String Description) {
         this.Id = Id;
         this.Name = Name;
-        this.Line = Line;
+        this.Description = Description;
     }
 }

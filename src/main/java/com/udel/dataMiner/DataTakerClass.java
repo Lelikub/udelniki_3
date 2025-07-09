@@ -31,7 +31,7 @@ public class DataTakerClass {
     }
 
     private void DataTakerFromSQlite(){
-
+        
     }
 
     public Map<String, Object> ParsinById(List<Integer> InitMass){

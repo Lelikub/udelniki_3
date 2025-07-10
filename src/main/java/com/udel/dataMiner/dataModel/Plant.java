@@ -30,14 +30,14 @@ public class Plant {
     @Column(name = "description")
     public String Description;
 
-    @OneToMany(mappedBy="plant", cascade=CascadeType.ALL, orphanRemoval= true)
+    @OneToMany(mappedBy="Plant", cascade=CascadeType.ALL, orphanRemoval= true)
     public List<Line> Lines;
 
     @Enumerated(EnumType.STRING)
     @Column(name="plant_group")
     public PlantGroup PlantGroup;
 
-    @OneToMany(mappedBy="plant", cascade=CascadeType.ALL, orphanRemoval= true)
+    @OneToMany(mappedBy="Plant", cascade=CascadeType.ALL, orphanRemoval= true)
     public List<Item> Items;
 
     public Plant() {

@@ -28,5 +28,6 @@
         <mapping class="com.udel.dataMiner.dataModel.Line"/>
         <mapping class="com.udel.dataMiner.dataModel.Item"/>
         <mapping class="com.udel.dataMiner.dataModel.Mode"/>
+        <mapping class="com.udel.dataMiner.dataModel.Condition"/>
     </session-factory>
 </hibernate-configuration>

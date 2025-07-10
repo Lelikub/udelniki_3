@@ -1,7 +1,25 @@
 package com.udel.dataMiner;
 
+import java.util.List;
+
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.query.Query;
+import org.hibernate.Transaction;
+
+import com.udel.dataMiner.dataModel.Condition;
+import com.udel.dataMiner.dataModel.Item;
+import com.udel.dataMiner.dataModel.Line;
+import com.udel.dataMiner.dataModel.Mode;
+import com.udel.dataMiner.dataModel.Plant;
+
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
+
+
+
 
 public class SQLiteMiner {
     private static SessionFactory sessionFactory = null;
@@ -16,4 +34,321 @@ public class SQLiteMiner {
             throw new ExceptionInInitializerError(ex);
         }
     }
+
+    public static Plant getPlantById(int id){
+        try(Session session = sessionFactory.openSession()){
+            return session.find(Plant.class, id);
+        }
+    }
+
+    public static Line getLineById(int id){
+        try(Session session = sessionFactory.openSession()){
+            return session.find(Line.class, id);
+        }
+    }
+
+    public static Item getItemById(int id){
+        try(Session session = sessionFactory.openSession()){
+            return session.find(Item.class, id);
+        }
+    }
+
+    public static Mode getModeById(int id){
+        try(Session session = sessionFactory.openSession()){
+            return session.find(Mode.class, id);
+        }
+    }
+
+    public static Condition getConditionById(int id){
+        try(Session session = sessionFactory.openSession()){
+            return session.find(Condition.class, id);
+        }
+    }
+
+    public static List<Plant> getAllPlants(){
+        try(Session session = sessionFactory.openSession()){
+            CriteriaBuilder cb = session.getCriteriaBuilder();
+            CriteriaQuery<Plant> cq = cb.createQuery(Plant.class);
+            Root<Plant> rootEntry = cq.from(Plant.class);
+            CriteriaQuery<Plant> all = cq.select(rootEntry);
+
+            Query<Plant> query = session.createQuery(all);
+            return query.list();
+        }
+    }
+
+    public static List<Line> getAllLines(){
+        try(Session session = sessionFactory.openSession()){
+            CriteriaBuilder cb = session.getCriteriaBuilder();
+            CriteriaQuery<Line> cq = cb.createQuery(Line.class);
+            Root<Line> rootEntry = cq.from(Line.class);
+            CriteriaQuery<Line> all = cq.select(rootEntry);
+
+            Query<Line> query = session.createQuery(all);
+            return query.list();
+        }
+    }
+
+    public static List<Item> getAllItems(){
+        try(Session session = sessionFactory.openSession()){
+            CriteriaBuilder cb = session.getCriteriaBuilder();
+            CriteriaQuery<Item> cq = cb.createQuery(Item.class);
+            Root<Item> rootEntry = cq.from(Item.class);
+            CriteriaQuery<Item> all = cq.select(rootEntry);
+
+            Query<Item> query = session.createQuery(all);
+            return query.list();
+        }
+    }
+
+    public static List<Mode> getAllModes(){
+        try(Session session = sessionFactory.openSession()){
+            CriteriaBuilder cb = session.getCriteriaBuilder();
+            CriteriaQuery<Mode> cq = cb.createQuery(Mode.class);
+            Root<Mode> rootEntry = cq.from(Mode.class);
+            CriteriaQuery<Mode> all = cq.select(rootEntry);
+
+            Query<Mode> query = session.createQuery(all);
+            return query.list();
+        }
+    }
+
+    public static List<Condition> getAllConditions(){
+        try(Session session = sessionFactory.openSession()){
+            CriteriaBuilder cb = session.getCriteriaBuilder();
+            CriteriaQuery<Condition> cq = cb.createQuery(Condition.class);
+            Root<Condition> rootEntry = cq.from(Condition.class);
+            CriteriaQuery<Condition> all = cq.select(rootEntry);
+
+            Query<Condition> query = session.createQuery(all);
+            return query.list();
+        }
+    }
+
+    public static void savePlant(Plant plant) {
+        Transaction transaction = null;
+        try (Session session = sessionFactory.openSession()) {
+            transaction = session.beginTransaction();
+            session.persist(plant);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+    }
+
+    public static void updatePlant(Plant plant) {
+        Transaction transaction = null;
+        try (Session session = sessionFactory.openSession()) {
+            transaction = session.beginTransaction();
+            session.merge(plant);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+    }
+
+    public static void deletePlant(int plantId) {
+        Transaction transaction = null;
+        try (Session session = sessionFactory.openSession()) {
+            transaction = session.beginTransaction();
+            Plant plant = session.find(Plant.class, plantId);
+            if (plant != null) {
+                session.remove(plant);
+            }
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+    }
+
+    public static void saveLine(Line line) {
+        Transaction transaction = null;
+        try (Session session = sessionFactory.openSession()) {
+            transaction = session.beginTransaction();
+            session.persist(line);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+    }
+
+    public static void updateLine(Line line) {
+        Transaction transaction = null;
+        try (Session session = sessionFactory.openSession()) {
+            transaction = session.beginTransaction();
+            session.merge(line);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteLine(int lineId) {
+        Transaction transaction = null;
+        try (Session session = sessionFactory.openSession()) {
+            transaction = session.beginTransaction();
+            Line line = session.find(Line.class, lineId); // Современный способ
+            if (line != null) {
+                session.remove(line);
+            }
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+    }
+
+    public static void saveItem(Item item) {
+        Transaction transaction = null;
+        try (Session session = sessionFactory.openSession()) {
+            transaction = session.beginTransaction();
+            session.persist(item);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+    }
+
+    public static void updateItem(Item item) {
+        Transaction transaction = null;
+        try (Session session = sessionFactory.openSession()) {
+            transaction = session.beginTransaction();
+            session.merge(item);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteItem(int itemId) {
+        Transaction transaction = null;
+        try (Session session = sessionFactory.openSession()) {
+            transaction = session.beginTransaction();
+            Item item = session.find(Item.class, itemId); // Современный способ
+            if (item != null) {
+                session.remove(item);
+            }
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+    }
+
+    public static void saveMode(Mode mode) {
+        Transaction transaction = null;
+        try (Session session = sessionFactory.openSession()) {
+            transaction = session.beginTransaction();
+            session.persist(mode);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+    }
+
+    public static void updateMode(Mode mode) {
+        Transaction transaction = null;
+        try (Session session = sessionFactory.openSession()) {
+            transaction = session.beginTransaction();
+            session.merge(mode);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteMode(int modeId) {
+        Transaction transaction = null;
+        try (Session session = sessionFactory.openSession()) {
+            transaction = session.beginTransaction();
+            Mode mode = session.find(Mode.class, modeId); // Современный способ
+            if (mode != null) {
+                session.remove(mode);
+            }
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+    }
+    
+    public static void saveCondition(Condition condition) {
+        Transaction transaction = null;
+        try (Session session = sessionFactory.openSession()) {
+            transaction = session.beginTransaction();
+            session.persist(condition);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+    }
+
+    public static void updateCondition(Condition condition) {
+        Transaction transaction = null;
+        try (Session session = sessionFactory.openSession()) {
+            transaction = session.beginTransaction();
+            session.merge(condition);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteCondition(int conditionId) {
+        Transaction transaction = null;
+        try (Session session = sessionFactory.openSession()) {
+            transaction = session.beginTransaction();
+            Condition condition = session.find(Condition.class, conditionId); // Современный способ
+            if (condition != null) {
+                session.remove(condition);
+            }
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+    }
+
+
 }

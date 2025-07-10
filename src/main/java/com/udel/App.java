@@ -51,8 +51,8 @@ public final class App {
 
         UdelConectionClass test = new UdelConectionClass();
 
-        test.UdelItitialClass(TestInitList);
+        //test.UdelItitialClass(TestInitList);
 
-        test.UdelCalculationProvider(TestParams);
+        //test.UdelCalculationProvider(TestParams);
     }
 }

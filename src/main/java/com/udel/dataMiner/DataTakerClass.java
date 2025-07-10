@@ -5,10 +5,14 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.udel.dataMiner.dataModel.Condition;
 import com.udel.dataMiner.dataModel.Item;
 import com.udel.dataMiner.dataModel.Line;
 import com.udel.dataMiner.dataModel.Mode;
 import com.udel.dataMiner.dataModel.Plant;
+import com.udel.dataMiner.dataModel.enums.PlantGroup;
+import com.udel.dataMiner.dataModel.enums.TypeOfCost;
+import com.udel.dataMiner.dataModel.enums.TypeOfNatural;
 import com.udel.dataMiner.dataModel.tabelsForCalc.costs.CostAdKoef;
 import com.udel.dataMiner.dataModel.tabelsForCalc.costs.Inflation;
 import com.udel.dataMiner.dataModel.tabelsForCalc.costs.OnlyCost;
@@ -28,10 +32,177 @@ public class DataTakerClass {
 
     public DataTakerClass(){
         //TestDataFunc();
+        TestDataBaseSeed();
     }
 
     private void DataTakerFromSQlite(){
         
+    }
+
+    private void TestDataBaseSeed(){
+        Plant plant = new Plant();
+        plant.Name = "УСК";
+        plant.Description = "Установка Стабилизации Конденсата";
+        plant.PlantGroup = PlantGroup.PLANT;
+        
+        Line line1 = new Line();
+        line1.Name = "Линия 1";
+        line1.Description = "УСК Линия 1";
+        line1.PlantName = plant.Name;
+        line1.Plant = plant;
+
+        Line line2 = new Line();
+        line2.Name = "Линия 2";
+        line2.Description = "УСК Линия 2";
+        line2.PlantName = plant.Name;
+        line2.Plant = plant;
+
+        Item item1 = new Item();
+        item1.Name = "Технологическая Электроэнергия";
+        item1.Description = "Описание";
+        item1.Line = line1;
+        item1.NaturalCalc = TypeOfNatural.NaturalAndProcent;
+        item1.CostCalc = TypeOfCost.CostAndKoef;
+
+        Item item2 = new Item();
+        item2.Name = "Технологическая Электроэнергия";
+        item2.Description = "Описание";
+        item2.Line = line2;
+        item2.NaturalCalc = TypeOfNatural.NaturalAndProcent;
+        item2.CostCalc = TypeOfCost.CostAndKoef;
+
+        Item item3 = new Item();
+        item3.Name = "ГСН";
+        item3.Description = "Описание";
+        item3.Line = line1;
+        item3.NaturalCalc = TypeOfNatural.Natural;
+        item3.CostCalc = TypeOfCost.OnlyCost;
+
+        Item item4 = new Item();
+        item4.Name = "ГСН";
+        item4.Description = "Описание";
+        item4.Line = line1;
+        item4.NaturalCalc = TypeOfNatural.Natural;
+        item4.CostCalc = TypeOfCost.OnlyCost;
+
+        Item item5 = new Item();
+        item5.Name = "Вспомогательная Электроэнергия";
+        item5.Description = "Описание";
+        item5.Plant = plant;
+        item5.NaturalCalc = TypeOfNatural.NaturalAndProcent;
+        item5.CostCalc = TypeOfCost.CostAndKoef;
+
+        Item item6 = new Item();
+        item6.Name = "Отопление";
+        item6.Description = "Описание";
+        item6.Plant = plant;
+        item6.NaturalCalc = TypeOfNatural.OnlyProcent;
+        item6.CostCalc = TypeOfCost.OnlyCost;
+
+        Condition condition1 = new Condition();
+        condition1.Name = "Работа";
+        condition1.Description = "Режим работы";
+        Condition condition2 = new Condition();
+        condition2.Name = "Ремонт";
+        condition2.Description = "Режим ремонта";
+        Condition condition3 = new Condition();
+        condition3.Name = "Простой";
+        condition3.Description = "Режим простоя";
+
+        Mode mode1 = new Mode();
+        mode1.Name = "ДК";
+        mode1.Line = line1;
+        Mode mode2 = new Mode();
+        mode2.Name = "СК(ДТ)";
+        mode2.Line = line1;
+        Mode mode3 = new Mode();
+        mode3.Name = "СК(ТС-1)";
+        mode3.Line = line1;
+        Mode mode4 = new Mode();
+        mode4.Name = "Лег.СК";
+        mode4.Line = line1;
+
+        Mode mode5 = new Mode();
+        mode5.Name = "ДК";
+        mode5.Line = line2;
+        Mode mode6 = new Mode();
+        mode6.Name = "СК(ДТ)";
+        mode6.Line = line2;
+        Mode mode7 = new Mode();
+        mode7.Name = "СК(ТС-1)";
+        mode7.Line = line2;
+        Mode mode8 = new Mode();
+        mode8.Name = "Лег.СК";
+        mode8.Line = line2;
+
+        List<Mode> modes1 = new ArrayList<>();
+        modes1.add(mode1);
+        modes1.add(mode2);
+        modes1.add(mode3);
+        modes1.add(mode4);
+        line1.Modes = modes1;
+
+        List<Mode> modes2 = new ArrayList<>();
+        modes2.add(mode5);
+        modes2.add(mode6);
+        modes2.add(mode7);
+        modes2.add(mode8);
+        line2.Modes = modes2;
+
+        List<Condition> conditions = new ArrayList<>();
+        conditions.add(condition1);
+        conditions.add(condition2);
+        conditions.add(condition3);
+        line1.Conditions = conditions;
+        line2.Conditions = conditions;
+
+        List<Item> items1 = new ArrayList<>();
+        items1.add(item1);
+        items1.add(item2);
+        line1.Items = items1;
+        List<Item> items2 = new ArrayList<>();
+        items2.add(item3);
+        items2.add(item4);
+        line2.Items = items2;
+        List<Item> items3 = new ArrayList<>();
+        items3.add(item5);
+        items3.add(item6);
+        plant.Items =items3;
+        
+        List<Line> lines = new ArrayList<>();
+        lines.add(line1);
+        lines.add(line2);
+        plant.Lines = lines;
+
+        SQLiteMiner.savePlant(plant);
+
+        for (Line line : Lines) {
+            SQLiteMiner.saveLine(line);
+        }
+
+        for (Item item : items1) {
+            SQLiteMiner.saveItem(item);
+        }
+
+        for (Item item : items2) {
+            SQLiteMiner.saveItem(item);
+        }
+
+        for (Item item : items3) {
+            SQLiteMiner.saveItem(item);
+        }
+
+        for (Mode mode : modes1) {
+            SQLiteMiner.saveMode(mode);
+        }
+
+        for (Mode mode : modes2) {
+            SQLiteMiner.saveMode(mode);
+        }
+
+        for (Condition cond : conditions) {
+            SQLiteMiner.saveCondition(cond);
+        }
     }
 
     public Map<String, Object> ParsinById(List<Integer> InitMass){

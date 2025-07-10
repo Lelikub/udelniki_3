@@ -176,7 +176,7 @@ public class DataTakerClass {
 
         SQLiteMiner.savePlant(plant);
 
-        for (Line line : Lines) {
+        for (Line line : lines) {
             SQLiteMiner.saveLine(line);
         }
 

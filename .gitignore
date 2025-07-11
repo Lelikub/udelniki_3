@@ -1,6 +1,9 @@
 # IntelliJ IDEA
 .idea/*
+.vscode/*
 # build output
 /out/
 /target/
 /build/
+# data bases
+.dataMiner.bd

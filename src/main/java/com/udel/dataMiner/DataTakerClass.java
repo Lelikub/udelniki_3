@@ -33,6 +33,7 @@ public class DataTakerClass {
     public DataTakerClass(){
         //TestDataFunc();
         TestDataBaseSeed();
+        
     }
 
     private void DataTakerFromSQlite(){

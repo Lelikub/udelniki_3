@@ -9,11 +9,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 @Entity
 @Table(name="Lines")
@@ -40,12 +39,13 @@ public class Line {
     @JoinColumn(name = "plant_id", insertable = false, updatable = false)
     public Plant Plant;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    /*@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "line_condition",
             joinColumns = @JoinColumn(name = "line_id"),
             inverseJoinColumns = @JoinColumn(name = "condition_id")
-    )
+    )*/
+    @Transient
     public List<Condition> Conditions;
 
     @OneToMany(mappedBy = "Line", cascade = CascadeType.ALL, orphanRemoval= true)

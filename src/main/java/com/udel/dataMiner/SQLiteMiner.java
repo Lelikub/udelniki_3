@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
-import org.hibernate.Transaction;
 
 import com.udel.dataMiner.dataModel.Condition;
 import com.udel.dataMiner.dataModel.Item;
@@ -43,7 +43,11 @@ public class SQLiteMiner {
 
     public static Line getLineById(int id){
         try(Session session = sessionFactory.openSession()){
-            return session.find(Line.class, id);
+            Line line = session.find(Line.class, id);
+            if(line != null){
+                line.Conditions = getAllConditions();
+            }
+            return line;
         }
     }
 

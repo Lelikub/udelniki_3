@@ -32,12 +32,20 @@ public class DataTakerClass {
 
     public DataTakerClass(){
         //TestDataFunc();
-        TestDataBaseSeed();
+        //TestDataBaseSeed();
+        DataTakerFromSQlite();
+
+        for (Plant plant : Plants) {
+            System.out.println(plant);
+        }
 
     }
 
     private void DataTakerFromSQlite(){
-        
+        Plants = SQLiteMiner.getAllPlants();
+        Lines = SQLiteMiner.getAllLines();
+        Modes = SQLiteMiner.getAllModes();
+        Items = SQLiteMiner.getAllItems();
     }
 
     private void TestDataBaseSeed(){
@@ -179,34 +187,6 @@ public class DataTakerClass {
 
         for (Condition cond : conditions)
             SQLiteMiner.saveCondition(cond);
-
-        /*for (Line line : lines) {
-            SQLiteMiner.saveLine(line);
-        }
-
-        for (Item item : items1) {
-            SQLiteMiner.saveItem(item);
-        }
-
-        for (Item item : items2) {
-            SQLiteMiner.saveItem(item);
-        }
-
-        for (Item item : items3) {
-            SQLiteMiner.saveItem(item);
-        }
-
-        for (Mode mode : modes1) {
-            SQLiteMiner.saveMode(mode);
-        }
-
-        for (Mode mode : modes2) {
-            SQLiteMiner.saveMode(mode);
-        }
-
-        for (Condition cond : conditions) {
-            SQLiteMiner.saveCondition(cond);
-        }*/
     }
 
     public Map<String, Object> ParsinById(List<Integer> InitMass){
@@ -229,48 +209,7 @@ public class DataTakerClass {
         return data;
     }
 
-    /*private void TestDataFunc(){
-        Plants = new ArrayList<>();
-        Lines = new ArrayList<>();
-        Modes = new ArrayList<>();
-        Items = new ArrayList<>();
-
-        Items.add(new Item(0, "Технологическая Электроэнергия", "Описание", TypeOfNatural.NaturalAndProcent, TypeOfCost.CostAndKoef));
-        Items.add(new Item(1, "ГСН", "Описание", TypeOfNatural.Natural, TypeOfCost.OnlyCost));
-        Items.add(new Item(2, "Вспомогательная Электроэнергия", "Описание", TypeOfNatural.NaturalAndProcent, TypeOfCost.CostAndKoef));
-        Items.add(new Item(3, "Отопление", "Описание", TypeOfNatural.OnlyProcent, TypeOfCost.OnlyCost));
-
-        Modes.add(new Mode(0, "ДК", 0, "УСК"));
-        Modes.add(new Mode(1, "СК(ДТ)", 0, "УСК"));
-        Modes.add(new Mode(2, "СК(ТС-1)", 0, "УСК"));
-        Modes.add(new Mode(3, "Лег.СК", 0, "УСК"));
-
-        List<Condition> conditions = new ArrayList<>();
-        conditions.add(new Condition(0, "Работа", "Режим работы"));
-        conditions.add(new Condition(1, "Ремонт", "Режим ремонта"));
-        conditions.add(new Condition(2, "Простой", "Режим простоя"));
-        Lines.add(new Line(0, "Линия 1", "УСК Линия 1", "УСК", 0, conditions, new ArrayList<>(), new ArrayList<>()));
-        Lines.add(new Line(1, "Линия 2", "УСК Линия 2", "УСК", 0, conditions, new ArrayList<>(), new ArrayList<>()));
-
-        Plants.add(new Plant(0, "УСК", "Установка Стабилизации Конденсата", new ArrayList<>(), PlantGroup.PLANT, new ArrayList<>()));
-
-        Lines.get(0).PlantId = Plants.get(0).Id;
-        Lines.get(0).Items.add(Items.get(1));
-        Lines.get(0).Items.add(Items.get(0));
-        Lines.get(0).Modes.addAll(Modes);
-        Lines.get(1).PlantId = Plants.get(0).Id;
-        Lines.get(1).Items.add(Items.get(1));
-        Lines.get(1).Items.add(Items.get(0));
-        Lines.get(1).Modes.addAll(Modes);
-
-        Plants.get(0).Lines.add(Lines.get(0));
-        Plants.get(0).Lines.add(Lines.get(1));
-        Plants.get(0).Items.add(Items.get(2));
-        Plants.get(0).Items.add(Items.get(3));
-
-        TestSeedData(Plants);
-    }
-
+    /*
     private void TestSeedData(List<Plant> Plants){
         double[] _Palnt_Elec_Proc = {0.98, 0.8, 0.89, 0.96, 0.72, 0.87, 0.86, 0.92, 0.89, 1, 0.71, 0.78};
         double[] _Plant_Elec_Koef = {0.95, 0.98, 0.97, 0.97, 0.97, 0.98, 1, 1.02, 1.07, 1.03, 1.03, 1.03};

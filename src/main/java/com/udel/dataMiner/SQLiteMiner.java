@@ -74,8 +74,9 @@ public class SQLiteMiner {
             CriteriaBuilder cb = session.getCriteriaBuilder();
             CriteriaQuery<Plant> cq = cb.createQuery(Plant.class);
             Root<Plant> rootEntry = cq.from(Plant.class);
+            //rootEntry.fetch("Lines", JoinType.LEFT);
+            //rootEntry.fetch("Items", JoinType.LEFT);
             CriteriaQuery<Plant> all = cq.select(rootEntry);
-
             Query<Plant> query = session.createQuery(all);
             return query.list();
         }
@@ -86,8 +87,9 @@ public class SQLiteMiner {
             CriteriaBuilder cb = session.getCriteriaBuilder();
             CriteriaQuery<Line> cq = cb.createQuery(Line.class);
             Root<Line> rootEntry = cq.from(Line.class);
+            //rootEntry.fetch("items", JoinType.LEFT);
+            //rootEntry.fetch("modes", JoinType.LEFT);
             CriteriaQuery<Line> all = cq.select(rootEntry);
-
             Query<Line> query = session.createQuery(all);
             return query.list();
         }

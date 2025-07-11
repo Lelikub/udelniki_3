@@ -9,6 +9,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -30,14 +31,14 @@ public class Plant {
     @Column(name = "description")
     public String Description;
 
-    @OneToMany(mappedBy="Plant", cascade=CascadeType.ALL, orphanRemoval= true)
+    @OneToMany(mappedBy="Plant", cascade=CascadeType.ALL, orphanRemoval= true, fetch = FetchType.EAGER)
     public List<Line> Lines;
 
     @Enumerated(EnumType.STRING)
     @Column(name="plant_group")
     public PlantGroup PlantGroup;
 
-    @OneToMany(mappedBy="Plant", cascade=CascadeType.ALL, orphanRemoval= true)
+    @OneToMany(mappedBy="Plant", cascade=CascadeType.ALL, orphanRemoval= true, fetch= FetchType.EAGER)
     public List<Item> Items;
 
     public Plant() {

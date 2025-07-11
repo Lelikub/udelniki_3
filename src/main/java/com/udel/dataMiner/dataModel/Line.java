@@ -5,6 +5,7 @@ import java.util.List;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -32,11 +33,8 @@ public class Line {
     @Column(name = "plant_name")
     public String PlantName;
 
-    @Column(name = "plant_id")
-    public int PlantId;
-
-    @ManyToOne
-    @JoinColumn(name = "plant_id", insertable = false, updatable = false)
+    @ManyToOne(fetch= FetchType.EAGER)
+    @JoinColumn(name = "plant_id")
     public Plant Plant;
 
     /*@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -48,21 +46,20 @@ public class Line {
     @Transient
     public List<Condition> Conditions;
 
-    @OneToMany(mappedBy = "Line", cascade = CascadeType.ALL, orphanRemoval= true)
+    @OneToMany(mappedBy = "Line", cascade = CascadeType.ALL, orphanRemoval= true, fetch= FetchType.EAGER)
     public List<Mode> Modes;
 
-    @OneToMany(mappedBy = "Line", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "Line", cascade = CascadeType.ALL, orphanRemoval = true, fetch= FetchType.EAGER)
     public List<Item> Items;
 
     public Line() {
     }
 
-    public Line(int Id, String Name, String Description, String PlantName, int PlantId, Plant plant, List<Condition> Conditions, List<Mode> Modes, List<Item> Items) {
+    public Line(int Id, String Name, String Description, String PlantName, Plant plant, List<Condition> Conditions, List<Mode> Modes, List<Item> Items) {
         this.Id = Id;
         this.Name = Name;
         this.Description = Description;
         this.PlantName = PlantName;
-        this.PlantId = PlantId;
         this.Plant = plant;
         this.Conditions = Conditions;
         this.Modes = Modes;

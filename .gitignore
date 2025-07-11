@@ -5,5 +5,5 @@
 /out/
 /target/
 /build/
-# data bases
-/dataMiner.bd
+# data base
+*.db

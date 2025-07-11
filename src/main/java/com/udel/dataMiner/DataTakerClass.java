@@ -33,7 +33,7 @@ public class DataTakerClass {
     public DataTakerClass(){
         //TestDataFunc();
         TestDataBaseSeed();
-        
+
     }
 
     private void DataTakerFromSQlite(){
@@ -177,7 +177,10 @@ public class DataTakerClass {
 
         SQLiteMiner.savePlant(plant);
 
-        for (Line line : lines) {
+        for (Condition cond : conditions)
+            SQLiteMiner.saveCondition(cond);
+
+        /*for (Line line : lines) {
             SQLiteMiner.saveLine(line);
         }
 
@@ -203,7 +206,7 @@ public class DataTakerClass {
 
         for (Condition cond : conditions) {
             SQLiteMiner.saveCondition(cond);
-        }
+        }*/
     }
 
     public Map<String, Object> ParsinById(List<Integer> InitMass){

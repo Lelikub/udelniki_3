@@ -31,12 +31,13 @@ public class CalculationClass {
         List<String> ItemsList = new ArrayList<>();
         List<Double> NaturaList = new ArrayList<>();
         List<Double> CostsList = new ArrayList<>();
+        int line_count = 0;
 
         for (String key : ParsedData.keySet()) {
             KeysFromParsedData.add(key);
         }
 
-        List<Plant> ParsedPlants = (List<Plant>) ParsedData.get(KeysFromParsedData.get(0));
+        List<Plant> ParsedPlants = (List<Plant>) ParsedData.get(KeysFromParsedData.get(KeysFromParsedData.size() - 1));
         
         for (Integer IakKey : KeysFromIak) {
             List<CostParameter> Params = (List<CostParameter>) IakData.get(IakKey);
@@ -46,11 +47,11 @@ public class CalculationClass {
                         switch (Item.NaturalCalc){
                             case NaturalAndProcent:
                                 ItemsList.add(Plant.Name + " " +Item.Name);
-                                NaturaList.add(NaturalAdProcent(Plant, Item, Params.get(0),(List<NaturalAdProcent>) ParsedData.get(KeysFromParsedData.get(1))));
+                                NaturaList.add(NaturalAdProcent(Plant, Item, Params.get(0),(List<NaturalAdProcent>) ParsedData.get("Натуральная показатель на процент")));
                                 break;
                             case OnlyProcent:
                                 ItemsList.add(Plant.Name + " " +Item.Name);
-                                NaturaList.add( Params.get(0).general.getGnsForHeat() * OnlyProcent(Plant, Item, (List<OnlyProcent>) ParsedData.get(KeysFromParsedData.get(2))));
+                                NaturaList.add( Params.get(0).general.getGnsForHeat() * OnlyProcent(Plant, Item, (List<OnlyProcent>) ParsedData.get("Только процентный показатель")));
                                 break;
                             case Natural:
                                 //ItemsList.add(Plant.Name + " " +Item.Name);
@@ -61,10 +62,10 @@ public class CalculationClass {
                         }
                         switch (Item.CostCalc) {
                             case CostAndKoef:
-                                CostsList.add(CostAdKoef(Plant, Params.get(0) ,Item, (List<CostAdKoef>) ParsedData.get(KeysFromParsedData.get(3))));
+                                CostsList.add(CostAdKoef(Plant, Params.get(0) ,Item, (List<CostAdKoef>) ParsedData.get("Стоимость на коеффициент")));
                                 break;
                             case OnlyCost:
-                                CostsList.add(OnlyCost(Plant, Item, (List<OnlyCost>) ParsedData.get(KeysFromParsedData.get(4))));
+                                CostsList.add(OnlyCost(Plant, Item, (List<OnlyCost>) ParsedData.get("Только стоимость")));
                                 break;
                             default:
                                 throw new AssertionError();
@@ -75,7 +76,7 @@ public class CalculationClass {
                             switch (Item.NaturalCalc){
                                 case NaturalAndProcent:
                                     ItemsList.add(Line.Description + " " + Item.Name);
-                                    NaturaList.add(NaturalAdProcent(Line, Params.get(Line.Id),Item, (List<NaturalAdProcent>) ParsedData.get(KeysFromParsedData.get(1))));
+                                    NaturaList.add(NaturalAdProcent(Line, Params.get(line_count),Item, (List<NaturalAdProcent>) ParsedData.get("Натуральная показатель на процент")));
                                     break;
                                 case OnlyProcent:
                                     //ItemsList.add(Line.Description + " " + Item.Name);
@@ -90,15 +91,16 @@ public class CalculationClass {
                             }
                             switch (Item.CostCalc) {
                                 case CostAndKoef:
-                                    CostsList.add(CostAdKoef(Line, Params.get(Line.Id), Item, (List<CostAdKoef>) ParsedData.get(KeysFromParsedData.get(3))));
+                                    CostsList.add(CostAdKoef(Line, Params.get(line_count), Item, (List<CostAdKoef>) ParsedData.get("Стоимость на коеффициент")));
                                     break;
                                 case OnlyCost:
-                                    CostsList.add(OnlyCost(Line, Params.get(Line.Id), Item, (List<OnlyCost>) ParsedData.get(KeysFromParsedData.get(4))));
+                                    CostsList.add(OnlyCost(Line, Params.get(line_count), Item, (List<OnlyCost>) ParsedData.get("Только стоимость")));
                                     break;
                                 default:
                                     throw new AssertionError();
                             }
                         }
+                        line_count++;
                     }
                     ItemsAndCosts.put(IakKey, new HashMap<>());
                     Map<String, Double> tempItems = new HashMap<>();
@@ -106,6 +108,7 @@ public class CalculationClass {
                         tempItems.put(ItemsList.get(i),  NaturaList.get(i) * CostsList.get(i));
                     ItemsAndCosts.get(IakKey).putAll(tempItems);
                 }
+                line_count = 0;
             }
         }
         return ItemsAndCosts;

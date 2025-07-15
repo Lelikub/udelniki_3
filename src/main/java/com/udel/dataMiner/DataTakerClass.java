@@ -24,7 +24,7 @@ public class DataTakerClass {
     private Map<String, Object> data = new LinkedHashMap<>(); 
 
     public DataTakerClass(){
-        TestDataBaseSeed();
+        //TestDataBaseSeed();
         DataTakerFromSQlite();
     }
 

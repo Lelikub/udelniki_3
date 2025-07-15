@@ -17,8 +17,8 @@ public final class App {
 
         Map<Integer, Object> TestParams = new HashMap<>();
         List<CostParameter> UskParams = new ArrayList<>();
+        UskParams.add(new CostParameter(0));
         UskParams.add(new CostParameter(1));
-        UskParams.add(new CostParameter(2));
 
         Map<Integer, Double> EnterFlows = new HashMap<>();
         Map<Integer, Double> ExitFlows = new HashMap<>();

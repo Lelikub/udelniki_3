@@ -194,7 +194,7 @@ public class DataTakerClass {
         lines.add(line2);
         plant.Lines = lines;
 
-        SQLiteMiner.savePlant(plant);
+        //SQLiteMiner.savePlant(plant);
 
         List<Plant> testPlants = new ArrayList<>();
         testPlants.add(plant);
@@ -237,13 +237,12 @@ public class DataTakerClass {
                     case NaturalAndProcent:
                         temp = NaturalAdProcents.size();
                         for (int i = 0; i < _Palnt_Elec_Proc.length; i++) {
-                            NaturalAdProcents.add(new NaturalAdProcent(temp, Item.Name, Plant.Name + " " + i , _Palnt_Elec_Proc[i], _Plant_Elec_Natural));
-                            temp++;
+                            NaturalAdProcents.add(new NaturalAdProcent(0, Item.Name, Plant.Name + " " + i , _Palnt_Elec_Proc[i], _Plant_Elec_Natural));
                         }
                         break;
                     case OnlyProcent:
                         temp = OnlyProcents.size();
-                        OnlyProcents.add(new OnlyProcent(temp, Item.Name, Plant.Name, 0.05));
+                        OnlyProcents.add(new OnlyProcent(0, Item.Name, Plant.Name, 0.05));
                         break;
                     case Natural:
                         break;
@@ -254,13 +253,12 @@ public class DataTakerClass {
                     case CostAndKoef:
                         temp = CostAdKoefs.size();
                         for (int i = 0; i < _Plant_Elec_Koef.length; i++) {
-                            CostAdKoefs.add(new CostAdKoef(temp, Item.Name, Plant.Name + " " + i, _Plant_Elec_Koef[i], _Plant_Elec_Cost));
-                            temp++;
+                            CostAdKoefs.add(new CostAdKoef(0, Item.Name, Plant.Name + " " + i, _Plant_Elec_Koef[i], _Plant_Elec_Cost));
                         }
                         break;
                     case OnlyCost:
                         temp = OnlyCosts.size();
-                        OnlyCosts.add(new OnlyCost(temp, Item.Name, Plant.Name, 500));
+                        OnlyCosts.add(new OnlyCost(0, Item.Name, Plant.Name, 500));
                         break;
                     default:
                         throw new AssertionError();
@@ -276,13 +274,12 @@ public class DataTakerClass {
                                     case NaturalAndProcent:
                                         temp = NaturalAdProcents.size();
                                             for (int i = 0; i < _Plant_Elec_Rej_Proc.length; i++) {
-                                                NaturalAdProcents.add(new NaturalAdProcent(temp, Item.Name,  Line.Description + " " + Cond.Name + " " + Mode.Name + " " + i , _Plant_Elec_Rej_Proc[i], _Plant_Elec_Rej_Natural));
-                                                temp++;
+                                                NaturalAdProcents.add(new NaturalAdProcent(0, Item.Name,  Line.Description + " " + Cond.Name + " " + Mode.Name + " " + i , _Plant_Elec_Rej_Proc[i], _Plant_Elec_Rej_Natural));
                                             }
                                         break;
                                     case OnlyProcent:
                                         temp = OnlyProcents.size();
-                                        OnlyProcents.add(new OnlyProcent(temp, Item.Name, Plant.Name, 0.05));
+                                        OnlyProcents.add(new OnlyProcent(0, Item.Name, Plant.Name, 0.05));
                                         break;
                                     case Natural:
                                         break;
@@ -293,13 +290,14 @@ public class DataTakerClass {
                                     case CostAndKoef:
                                         temp = CostAdKoefs.size();
                                         for (int i = 0; i < _Plant_Elec_Koef.length; i++) {
-                                            CostAdKoefs.add(new CostAdKoef(temp, Item.Name, Line.Description + " " + Cond.Name + " " + Mode.Name + " " + i, _Plant_Elec_Koef[i], _Plant_Elec_Cost));
+
+                                            CostAdKoefs.add(new CostAdKoef(0, Item.Name, Line.Description + " " + Cond.Name + " " + Mode.Name + " " + i, _Plant_Elec_Koef[i], _Plant_Elec_Cost));
                                             temp++;
                                         }
                                         break;
                                     case OnlyCost:
                                         temp = OnlyCosts.size();
-                                        OnlyCosts.add(new OnlyCost(temp, Item.Name, Line.Description + " " + Cond.Name + " " + Mode.Name, 500));
+                                        OnlyCosts.add(new OnlyCost(0, Item.Name, Line.Description + " " + Cond.Name + " " + Mode.Name, 500));
                                         break;
                                     default:
                                         throw new AssertionError();
@@ -313,13 +311,13 @@ public class DataTakerClass {
                                     case NaturalAndProcent:
                                         temp = NaturalAdProcents.size();
                                             for (int i = 0; i < _Plant_Elec_Rej_Proc.length; i++) {
-                                                NaturalAdProcents.add(new NaturalAdProcent(temp, Item.Name,  Line.Description + " " + Cond.Name + " " + i , 1, 0));
+                                                NaturalAdProcents.add(new NaturalAdProcent(0, Item.Name,  Line.Description + " " + Cond.Name + " " + i , 1, 0));
                                                 temp++;
                                             }
                                         break;
                                     case OnlyProcent:
                                         temp = OnlyProcents.size();
-                                        OnlyProcents.add(new OnlyProcent(temp, Item.Name, Plant.Name, 0.05));
+                                        OnlyProcents.add(new OnlyProcent(0, Item.Name, Plant.Name, 0.05));
                                         break;
                                     case Natural:
                                         break;
@@ -330,13 +328,13 @@ public class DataTakerClass {
                                     case CostAndKoef:
                                         temp = CostAdKoefs.size();
                                         for (int i = 0; i < _Plant_Elec_Koef.length; i++) {
-                                            CostAdKoefs.add(new CostAdKoef(temp, Item.Name, Line.Description + " " + Cond.Name + " " + i, _Plant_Elec_Koef[i], _Plant_Elec_Cost));
+                                            CostAdKoefs.add(new CostAdKoef(0, Item.Name, Line.Description + " " + Cond.Name + " " + i, _Plant_Elec_Koef[i], _Plant_Elec_Cost));
                                             temp++;
                                         }
                                         break;
                                     case OnlyCost:
                                         temp = OnlyCosts.size();
-                                        OnlyCosts.add(new OnlyCost(temp, Item.Name, Line.Description + " " + Cond.Name, 500));
+                                        OnlyCosts.add(new OnlyCost(0, Item.Name, Line.Description + " " + Cond.Name, 500));
                                         break;
                                     default:
                                         throw new AssertionError();
@@ -347,19 +345,16 @@ public class DataTakerClass {
             }
         }
         for (int i = 0; i < 12; i++) {
-            Inflations.add(new Inflation(i, "Инфляция", i + "", 1.0 + i * 0.03));
+            Inflations.add(new Inflation(0, "Инфляция", i + "", 1.0 + i * 0.03));
         }
 
-        for (CostAdKoef param : CostAdKoefs) 
-            SQLiteMiner.saveCostAdKoef(param);
-        for (Inflation param : Inflations) 
-            SQLiteMiner.saveInflation(param);
-        for (OnlyCost param : OnlyCosts) 
-            SQLiteMiner.saveOnlyCost(param);
-        for (NaturalAdProcent param : NaturalAdProcents) 
-            SQLiteMiner.saveNaturalAdProcent(param);
-        for (OnlyProcent param : OnlyProcents) 
-            SQLiteMiner.saveOnlyProcent(param);
-            
+        for (Plant plant : Plants) 
+          SQLiteMiner.savePlant(plant);
+        SQLiteMiner.saveCostAdKoef(CostAdKoefs);
+        SQLiteMiner.saveInflation(Inflations);
+        SQLiteMiner.saveOnlyCost(OnlyCosts);
+        SQLiteMiner.saveNaturalAdProcent(NaturalAdProcents);
+        SQLiteMiner.saveOnlyProcent(OnlyProcents);
+        
     }
 }

@@ -7,6 +7,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.udel.dataMiner.dataModel.Condition;
 import com.udel.dataMiner.dataModel.Item;
@@ -28,17 +30,20 @@ import jakarta.persistence.criteria.Root;
 
 public class SQLiteMiner {
     private static SessionFactory sessionFactory = null;
+    private static final Logger logger = LoggerFactory.getLogger(SQLiteMiner.class);
 
-    static{
+    static {
         try {
             Configuration configuration = new Configuration().configure();
             sessionFactory = configuration.buildSessionFactory();
         } 
         catch (Exception ex) {
             System.err.println("Failed to create sessionFactory object." + ex);
+            ex.printStackTrace();
             throw new ExceptionInInitializerError(ex);
         }
     }
+
 
     public static Plant getPlantById(int id){
         try(Session session = sessionFactory.openSession()){
@@ -231,12 +236,15 @@ public class SQLiteMiner {
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
+            logger.info("Сохраняем Plant с Id: {}", plant.Id);
             session.persist(plant);
             transaction.commit();
+            logger.info("Успешное сохранение");
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
             }
+            logger.error("Ошибка при сохранении Plant", e);
             e.printStackTrace();
         }
     }
@@ -452,19 +460,42 @@ public class SQLiteMiner {
         }
     }
 
+    public static void saveCostAdKoef(List<CostAdKoef> CostAdKoefs) {
+        Transaction transaction = null;
+        try (Session session = sessionFactory.openSession()){
+            //session.createNativeQuery("SELECT 1").getSingleResult();
+            transaction = session.beginTransaction();
+            for (CostAdKoef costAdKoef :CostAdKoefs) {
+                logger.info("Сохраняем CostAdKoef с id: {}", costAdKoef.Id);
+                session.persist(costAdKoef);
+            }
+            transaction.commit();
+            logger.info("CostAdKoefs успешно сохранены");
+        } catch (Exception e) {
+            if(transaction != null){
+                transaction.rollback();
+            }
+            logger.error("Ошибка при сохранении CostAdKoefs", e);
+            e.printStackTrace();
+        }
+    }
+
     public static void saveCostAdKoef(CostAdKoef CostAdKoef) {
         Transaction transaction = null;
-        try (Session session = sessionFactory.openSession()) {
+        try (Session session = sessionFactory.openSession()){
+            //session.createNativeQuery("SELECT 1").getSingleResult();
             transaction = session.beginTransaction();
             session.persist(CostAdKoef);
             transaction.commit();
         } catch (Exception e) {
-            if (transaction != null) {
+            if(transaction != null){
                 transaction.rollback();
             }
             e.printStackTrace();
         }
     }
+
+
 
     public static void updateCostAdKoef(CostAdKoef CostAdKoef) {
         Transaction transaction = null;
@@ -497,14 +528,16 @@ public class SQLiteMiner {
         }
     }
 
-    public static void saveInflation(Inflation Inflation) {
+    public static void saveInflation(List<Inflation> Inflations) {
         Transaction transaction = null;
-        try (Session session = sessionFactory.openSession()) {
+        try (Session session = sessionFactory.openSession()){
             transaction = session.beginTransaction();
-            session.persist(Inflation);
+            for (Inflation Inflation :Inflations) {
+                session.persist(Inflation);
+            }
             transaction.commit();
         } catch (Exception e) {
-            if (transaction != null) {
+            if(transaction != null){
                 transaction.rollback();
             }
             e.printStackTrace();
@@ -542,14 +575,16 @@ public class SQLiteMiner {
         }
     }
 
-    public static void saveOnlyCost(OnlyCost OnlyCost) {
+    public static void saveOnlyCost(List<OnlyCost> OnlyCosts) {
         Transaction transaction = null;
-        try (Session session = sessionFactory.openSession()) {
+        try (Session session = sessionFactory.openSession()){
             transaction = session.beginTransaction();
-            session.persist(OnlyCost);
+            for (OnlyCost OnlyCost :OnlyCosts) {
+                session.persist(OnlyCost);
+            }
             transaction.commit();
         } catch (Exception e) {
-            if (transaction != null) {
+            if(transaction != null){
                 transaction.rollback();
             }
             e.printStackTrace();
@@ -587,14 +622,16 @@ public class SQLiteMiner {
         }
     }
 
-    public static void saveNaturalAdProcent(NaturalAdProcent NaturalAdProcent) {
+    public static void saveNaturalAdProcent(List<NaturalAdProcent> NaturalAdProcents) {
         Transaction transaction = null;
-        try (Session session = sessionFactory.openSession()) {
+        try (Session session = sessionFactory.openSession()){
             transaction = session.beginTransaction();
-            session.persist(NaturalAdProcent);
+            for (NaturalAdProcent NaturalAdProcent :NaturalAdProcents) {
+                session.persist(NaturalAdProcent);
+            }
             transaction.commit();
         } catch (Exception e) {
-            if (transaction != null) {
+            if(transaction != null){
                 transaction.rollback();
             }
             e.printStackTrace();
@@ -632,14 +669,16 @@ public class SQLiteMiner {
         }
     }
 
-    public static void saveOnlyProcent(OnlyProcent OnlyProcent) {
+    public static void saveOnlyProcent(List<OnlyProcent> OnlyProcents) {
         Transaction transaction = null;
-        try (Session session = sessionFactory.openSession()) {
+        try (Session session = sessionFactory.openSession()){
             transaction = session.beginTransaction();
-            session.persist(OnlyProcent);
+            for (OnlyProcent OnlyProcent :OnlyProcents) {
+                session.persist(OnlyProcent);
+            }
             transaction.commit();
         } catch (Exception e) {
-            if (transaction != null) {
+            if(transaction != null){
                 transaction.rollback();
             }
             e.printStackTrace();

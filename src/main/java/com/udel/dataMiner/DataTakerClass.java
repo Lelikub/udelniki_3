@@ -21,31 +21,21 @@ import com.udel.dataMiner.dataModel.tabelsForCalc.naturals.OnlyProcent;
 
 public class DataTakerClass {
     private List<Plant> Plants;
-    private List<Line> Lines;
-    private List<Mode> Modes;
-    private List<Item> Items;
-    private List<NaturalAdProcent> NaturalAdProcents;
-    private List<OnlyProcent> OnlyProcents;
-    private List<CostAdKoef> CostAdKoefs;
-    private List<OnlyCost> OnlyCosts;
-    private List<Inflation> Inflations;    
+    private Map<String, Object> data = new LinkedHashMap<>(); 
 
     public DataTakerClass(){
-        //TestDataFunc();
-        //TestDataBaseSeed();
+        TestDataBaseSeed();
         DataTakerFromSQlite();
-
-        for (Plant plant : Plants) {
-            System.out.println(plant);
-        }
-
     }
 
     private void DataTakerFromSQlite(){
         Plants = SQLiteMiner.getAllPlants();
-        Lines = SQLiteMiner.getAllLines();
-        Modes = SQLiteMiner.getAllModes();
-        Items = SQLiteMiner.getAllItems();
+        data.put("Натуральная показатель на процент", SQLiteMiner.getAllNaturalAdProcent());
+        data.put("Только процентный показатель", SQLiteMiner.getAllOnlyProcent());
+        data.put("Стоимость на коеффициент", SQLiteMiner.getAllCostAdKoef());
+        data.put("Только стоимость", SQLiteMiner.getAllOnlyCost());
+        data.put("Инфляция", SQLiteMiner.getAllInflation());
+
     }
 
     private void TestDataBaseSeed(){
@@ -111,12 +101,28 @@ public class DataTakerClass {
         Condition condition1 = new Condition();
         condition1.Name = "Работа";
         condition1.Description = "Режим работы";
+        condition1.Line = line1;
         Condition condition2 = new Condition();
         condition2.Name = "Ремонт";
         condition2.Description = "Режим ремонта";
+        condition2.Line = line1;
         Condition condition3 = new Condition();
         condition3.Name = "Простой";
         condition3.Description = "Режим простоя";
+        condition3.Line = line1;
+
+        Condition condition4 = new Condition();
+        condition4.Name = "Работа";
+        condition4.Description = "Режим работы";
+        condition4.Line = line2;
+        Condition condition5 = new Condition();
+        condition5.Name = "Ремонт";
+        condition5.Description = "Режим ремонта";
+        condition5.Line = line2;
+        Condition condition6 = new Condition();
+        condition6.Name = "Простой";
+        condition6.Description = "Режим простоя";
+        condition6.Line = line2;
 
         Mode mode1 = new Mode();
         mode1.Name = "ДК";
@@ -158,12 +164,17 @@ public class DataTakerClass {
         modes2.add(mode8);
         line2.Modes = modes2;
 
-        List<Condition> conditions = new ArrayList<>();
-        conditions.add(condition1);
-        conditions.add(condition2);
-        conditions.add(condition3);
-        line1.Conditions = conditions;
-        line2.Conditions = conditions;
+        List<Condition> conditions1 = new ArrayList<>();
+        conditions1.add(condition1);
+        conditions1.add(condition2);
+        conditions1.add(condition3);
+        line1.Conditions = conditions1;
+
+        List<Condition> conditions2 = new ArrayList<>();
+        conditions2.add(condition4);
+        conditions2.add(condition5);
+        conditions2.add(condition6);
+        line2.Conditions = conditions2;
 
         List<Item> items1 = new ArrayList<>();
         items1.add(item1);
@@ -185,13 +196,14 @@ public class DataTakerClass {
 
         SQLiteMiner.savePlant(plant);
 
-        for (Condition cond : conditions)
-            SQLiteMiner.saveCondition(cond);
+        List<Plant> testPlants = new ArrayList<>();
+        testPlants.add(plant);
+
+        TestCalcSeedData(testPlants);
     }
 
     public Map<String, Object> ParsinById(List<Integer> InitMass){
         List<Plant> temp = new ArrayList<>();
-        Map<String, Object> data = new LinkedHashMap<>();
         for (int Id : InitMass) {
             for (Plant Plant : Plants) {
                 if(Plant.Id == Id)
@@ -200,17 +212,11 @@ public class DataTakerClass {
         }
 
         data.put("Данные из базы", temp);
-        data.put("Натуральная показатель на процент", NaturalAdProcents);
-        data.put("Только процентный показатель", OnlyProcents);
-        data.put("Стоимость на коеффициент", CostAdKoefs);
-        data.put("Только стоимость", OnlyCosts);
-        data.put("Инфляция", Inflations);
-
         return data;
     }
 
-    /*
-    private void TestSeedData(List<Plant> Plants){
+    
+    private void TestCalcSeedData(List<Plant> Plants){
         double[] _Palnt_Elec_Proc = {0.98, 0.8, 0.89, 0.96, 0.72, 0.87, 0.86, 0.92, 0.89, 1, 0.71, 0.78};
         double[] _Plant_Elec_Koef = {0.95, 0.98, 0.97, 0.97, 0.97, 0.98, 1, 1.02, 1.07, 1.03, 1.03, 1.03};
         double[] _Plant_Elec_Rej_Proc= {0.58, 0.58, 1, 1, 1, 1, 1, 1, 1, 1, 0.58, 0.58};
@@ -218,11 +224,12 @@ public class DataTakerClass {
         double _Plant_Elec_Natural = 65.76;
         double _Plant_Elec_Rej_Natural = 257;
 
-        NaturalAdProcents = new ArrayList<>();
-        OnlyProcents = new ArrayList<>();
-        CostAdKoefs = new ArrayList<>();
-        OnlyCosts = new ArrayList<>();
-        Inflations = new ArrayList<>();
+        List<NaturalAdProcent> NaturalAdProcents = new ArrayList<>();
+        List<OnlyProcent> OnlyProcents = new ArrayList<>();
+        List<CostAdKoef> CostAdKoefs = new ArrayList<>();
+        List<OnlyCost> OnlyCosts = new ArrayList<>();
+        List<Inflation> Inflations = new ArrayList<>();
+        
         int temp;
         for (Plant Plant : Plants) {
             for (Item Item : Plant.Items) {
@@ -247,7 +254,7 @@ public class DataTakerClass {
                     case CostAndKoef:
                         temp = CostAdKoefs.size();
                         for (int i = 0; i < _Plant_Elec_Koef.length; i++) {
-                            CostAdKoefs.add(new CostAdKoef(i, Item.Name, Plant.Name + " " + i, _Plant_Elec_Koef[i], _Plant_Elec_Cost));
+                            CostAdKoefs.add(new CostAdKoef(temp, Item.Name, Plant.Name + " " + i, _Plant_Elec_Koef[i], _Plant_Elec_Cost));
                             temp++;
                         }
                         break;
@@ -286,7 +293,7 @@ public class DataTakerClass {
                                     case CostAndKoef:
                                         temp = CostAdKoefs.size();
                                         for (int i = 0; i < _Plant_Elec_Koef.length; i++) {
-                                            CostAdKoefs.add(new CostAdKoef(i, Item.Name, Line.Description + " " + Cond.Name + " " + Mode.Name + " " + i, _Plant_Elec_Koef[i], _Plant_Elec_Cost));
+                                            CostAdKoefs.add(new CostAdKoef(temp, Item.Name, Line.Description + " " + Cond.Name + " " + Mode.Name + " " + i, _Plant_Elec_Koef[i], _Plant_Elec_Cost));
                                             temp++;
                                         }
                                         break;
@@ -323,7 +330,7 @@ public class DataTakerClass {
                                     case CostAndKoef:
                                         temp = CostAdKoefs.size();
                                         for (int i = 0; i < _Plant_Elec_Koef.length; i++) {
-                                            CostAdKoefs.add(new CostAdKoef(i, Item.Name, Line.Description + " " + Cond.Name + " " + i, _Plant_Elec_Koef[i], _Plant_Elec_Cost));
+                                            CostAdKoefs.add(new CostAdKoef(temp, Item.Name, Line.Description + " " + Cond.Name + " " + i, _Plant_Elec_Koef[i], _Plant_Elec_Cost));
                                             temp++;
                                         }
                                         break;
@@ -342,5 +349,17 @@ public class DataTakerClass {
         for (int i = 0; i < 12; i++) {
             Inflations.add(new Inflation(i, "Инфляция", i + "", 1.0 + i * 0.03));
         }
-    }*/
+
+        for (CostAdKoef param : CostAdKoefs) 
+            SQLiteMiner.saveCostAdKoef(param);
+        for (Inflation param : Inflations) 
+            SQLiteMiner.saveInflation(param);
+        for (OnlyCost param : OnlyCosts) 
+            SQLiteMiner.saveOnlyCost(param);
+        for (NaturalAdProcent param : NaturalAdProcents) 
+            SQLiteMiner.saveNaturalAdProcent(param);
+        for (OnlyProcent param : OnlyProcents) 
+            SQLiteMiner.saveOnlyProcent(param);
+            
+    }
 }

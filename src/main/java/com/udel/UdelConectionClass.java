@@ -16,7 +16,7 @@ public class UdelConectionClass {
 
     public UdelConectionClass() {}
 
-    public void UdelItitialClass(List<Integer> InitMass){
+    public void UdelItitial(List<Integer> InitMass){
         this.InitMass = InitMass;
         this.DataMap = AllData.ParsinById(this.InitMass);
     }

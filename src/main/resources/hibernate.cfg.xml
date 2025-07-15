@@ -29,5 +29,10 @@
         <mapping class="com.udel.dataMiner.dataModel.Item"/>
         <mapping class="com.udel.dataMiner.dataModel.Mode"/>
         <mapping class="com.udel.dataMiner.dataModel.Condition"/>
+        <mapping class="com.udel.dataMiner.dataModel.tabelsForCalc.costs.CostAdKoef"/>
+        <mapping class="com.udel.dataMiner.dataModel.tabelsForCalc.costs.Inflation"/>
+        <mapping class="com.udel.dataMiner.dataModel.tabelsForCalc.costs.OnlyCost"/>
+        <mapping class="com.udel.dataMiner.dataModel.tabelsForCalc.naturals.NaturalAdProcent"/>
+        <mapping class="com.udel.dataMiner.dataModel.tabelsForCalc.naturals.OnlyProcent"/>
     </session-factory>
 </hibernate-configuration>

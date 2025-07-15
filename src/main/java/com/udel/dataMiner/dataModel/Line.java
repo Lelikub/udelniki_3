@@ -13,10 +13,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 
 @Entity
-@Table(name="Lines")
+@Table(name="lines")
 public class Line {
 
     @Id
@@ -43,7 +42,7 @@ public class Line {
             joinColumns = @JoinColumn(name = "line_id"),
             inverseJoinColumns = @JoinColumn(name = "condition_id")
     )*/
-    @Transient
+    @OneToMany(mappedBy = "Line", cascade = CascadeType.ALL, orphanRemoval= true, fetch= FetchType.EAGER)
     public List<Condition> Conditions;
 
     @OneToMany(mappedBy = "Line", cascade = CascadeType.ALL, orphanRemoval= true, fetch= FetchType.EAGER)

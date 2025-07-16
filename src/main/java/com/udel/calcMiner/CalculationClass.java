@@ -84,7 +84,7 @@ public class CalculationClass {
                                     break;
                                 case Natural:
                                     ItemsList.add(Line.Description + " " + Item.Name);
-                                    NaturaList.add( Params.get(Line.Id).enter.getEnterFlows().get(0));
+                                    NaturaList.add( Params.get(line_count).enter.getEnterFlows().get(0));
                                     break;
                                 default:
                                     throw new AssertionError();

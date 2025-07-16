@@ -80,7 +80,7 @@ public class DataTakerClass {
         Item item4 = new Item();
         item4.Name = "ГСН";
         item4.Description = "Описание";
-        item4.Line = line1;
+        item4.Line = line2;
         item4.NaturalCalc = TypeOfNatural.Natural;
         item4.CostCalc = TypeOfCost.OnlyCost;
 
@@ -178,10 +178,10 @@ public class DataTakerClass {
 
         List<Item> items1 = new ArrayList<>();
         items1.add(item1);
-        items1.add(item2);
+        items1.add(item3);
         line1.Items = items1;
         List<Item> items2 = new ArrayList<>();
-        items2.add(item3);
+        items2.add(item2);
         items2.add(item4);
         line2.Items = items2;
         List<Item> items3 = new ArrayList<>();
@@ -290,7 +290,6 @@ public class DataTakerClass {
                                     case CostAndKoef:
                                         temp = CostAdKoefs.size();
                                         for (int i = 0; i < _Plant_Elec_Koef.length; i++) {
-
                                             CostAdKoefs.add(new CostAdKoef(0, Item.Name, Line.Description + " " + Cond.Name + " " + Mode.Name + " " + i, _Plant_Elec_Koef[i], _Plant_Elec_Cost));
                                             temp++;
                                         }

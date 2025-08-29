@@ -36,7 +36,6 @@ public class CalculationClass {
         List<String> ItemsList = new ArrayList<>();
         List<Double> NaturaList = new ArrayList<>();
         List<Double> CostsList = new ArrayList<>();
-        int line_count = 0;
 
         for (String key : ParsedData.keySet()) {
             KeysFromParsedData.add(key);
@@ -112,16 +111,14 @@ public class CalculationClass {
                                         }
                                     }
                                 }
-                                line_count++;
                             }
                         }
-                        ItemsAndCosts.put(plantFromIak.getId(), new HashMap<>());
-                        Map<String, Double> tempItems = new HashMap<>();
+                        ItemsAndCosts.put(plantFromIak.getId(), new LinkedHashMap<>());
+                        Map<String, Double> tempItems = new LinkedHashMap<>();
                         for (int i = 0; i < ItemsList.size(); i++)
                             tempItems.put(ItemsList.get(i), NaturaList.get(i) * CostsList.get(i));
                         ItemsAndCosts.get(plantFromIak.getId()).putAll(tempItems);
                     }
-                    line_count = 0;
                 }
             }
         }

@@ -1,6 +1,6 @@
 package com.udel.objectModel;
 
-public class Plant {
+public class ObjectPlant {
     /**
      * ID установки
      */
@@ -12,15 +12,25 @@ public class Plant {
     /**
      * Текущий номер модельного месяца
      */
-    private int modelMonthNumber;
+    protected int modelMonthNumber;
     /**
      * Значение показателя ГНС на отопление
      */
-    private double GnsForHeat;
+    protected double GnsForHeat;
 
-    public Plant(int id, String name) {
+    public ObjectPlant(int id, String name) {
         this.ID = id;
         this.NAME = name;
+    }
+
+    @Override
+    public String toString() {
+        return "ObjectPlant{" +
+            "ID=" + ID +
+            ", NAME='" + NAME + '\'' +
+            ", modelMonthNumber=" + modelMonthNumber +
+            ", GnsForHeat=" + GnsForHeat +
+            '}';
     }
 
     public int getId() {

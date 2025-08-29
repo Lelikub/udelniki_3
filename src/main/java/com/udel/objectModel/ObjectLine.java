@@ -1,6 +1,6 @@
 package com.udel.objectModel;
 
-public class Line extends Plant{
+public class ObjectLine extends ObjectPlant {
 
     /**
      * ID установки к которой принадлежит линия
@@ -16,9 +16,23 @@ public class Line extends Plant{
     private boolean isEnable;
 
 
-    public Line(int id, String name, int plant_ID) {
+    public ObjectLine(int id, String name, ObjectPlant plant) {
         super(id, name);
-        this.plant_ID=plant_ID;
+        this.plant_ID = plant.getId();
+        this.modelMonthNumber = plant.getModelMonthNumber();
+    }
+
+    @Override
+    public String toString() {
+        return "ObjectLine{" +
+            "ID=" + ID +
+            ", NAME='" + NAME +
+            ", plant_ID=" + plant_ID +
+            ", modeId=" + modeId +
+            ", isEnable=" + isEnable +
+            ", modelMonthNumber=" + modelMonthNumber +
+            ", GnsForHeat=" + GnsForHeat + '\'' +
+            '}';
     }
 
     public boolean isEnable() {

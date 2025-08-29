@@ -1,7 +1,8 @@
-package com.udel.calcMiner;
+package com.udel;
 
 import java.util.*;
 
+import com.udel.calcMiner.CalculationClass;
 import com.udel.dataMiner.DataTakerClass;
 import com.udel.objectModel.ObjectLine;
 import com.udel.objectModel.ObjectPlant;

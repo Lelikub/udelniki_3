@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.udel.calcMiner.UdelConectionClass;
 import com.udel.dataFromIAK.CostParameter;
 
 public final class App {

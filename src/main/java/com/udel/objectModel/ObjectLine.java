@@ -1,25 +1,23 @@
 package com.udel.objectModel;
 
-public class ObjectLine extends ObjectPlant {
+import com.udel.dataMiner.dataModel.enums.ConditionType;
 
-    /**
-     * ID установки к которой принадлежит линия
-     */
-    private final int plant_ID;
+public class ObjectLine extends ObjectModel {
+
     /**
      * ID режима в котором работает линия
      */
     private int modeId;
     /**
-     * Состояние линии активна/неактивна
+     * Состояние линии активна/ремонт/неактивна
      */
-    private boolean isEnable;
+    private ConditionType conditionType;
 
 
-    public ObjectLine(int id, String name, ObjectPlant plant) {
+    public ObjectLine(int id, String name, Integer modeId, ConditionType conditionType) {
         super(id, name);
-        this.plant_ID = plant.getId();
-        this.modelMonthNumber = plant.getModelMonthNumber();
+        this.modeId = modeId;
+        this.conditionType = conditionType;
     }
 
     @Override
@@ -27,24 +25,17 @@ public class ObjectLine extends ObjectPlant {
         return "ObjectLine{" +
             "ID=" + ID +
             ", NAME='" + NAME +
-            ", plant_ID=" + plant_ID +
             ", modeId=" + modeId +
-            ", isEnable=" + isEnable +
-            ", modelMonthNumber=" + modelMonthNumber +
-            ", GnsForHeat=" + GnsForHeat + '\'' +
+            ", conditionType=" + conditionType +
             '}';
     }
 
-    public boolean isEnable() {
-        return isEnable;
+    public ConditionType getConditionType() {
+        return conditionType;
     }
 
-    public void setEnable(boolean enable) {
-        isEnable = enable;
-    }
-
-    public int getPlant_ID() {
-        return plant_ID;
+    public void setConditionType(ConditionType conditionType) {
+        this.conditionType = conditionType;
     }
 
     public int getModeId() {

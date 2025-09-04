@@ -23,15 +23,19 @@ public class Mode {
     public String Name;
 
     @ManyToOne
-    @JoinColumn(name = "line_id")
-    public Line Line;
+    @JoinColumn(name = "object_id")
+    public ObjectEntity Object;
 
     public Mode() {
     }
 
-    public Mode(int Id, String Name, Line Line) {
+    public Mode(int Id, String Name, ObjectEntity Object) {
         this.Id = Id;
         this.Name = Name;
-        this.Line = Line;
+        this.Object = Object;
+    }
+    public Mode(String Name, ObjectEntity Object) {
+        this.Name = Name;
+        this.Object = Object;
     }
 }

@@ -25,17 +25,21 @@ public class  Condition{
     public String Description;
 
     @ManyToOne
-    @JoinColumn(name = "line_id")
-    public Line Line;
-
+    @JoinColumn(name = "object_id")
+    public ObjectEntity Object;
 
     public Condition() {
     }
 
-    public Condition(int Id, String Name, String Description, Line Line) {
+    public Condition(int Id, String Name, String Description, ObjectEntity Object) {
         this.Id = Id;
         this.Name = Name;
         this.Description = Description;
-        this.Line = Line;
+        this.Object = Object;
+    }
+    public Condition(String Name, String Description, ObjectEntity Object) {
+        this.Name = Name;
+        this.Description = Description;
+        this.Object = Object;
     }
 }

@@ -293,6 +293,12 @@ public class SQLiteMiner {
         }
     }
 
+    public static List<ObjectParameters> getAllObjectParameters() {
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("from ObjectParameters", ObjectParameters.class).list();
+        }
+    }
+
     public static ObjectEntity getObjectById(int id) {
         try (Session session = sessionFactory.openSession()) {
             return session.find(ObjectEntity.class, id);
@@ -315,7 +321,25 @@ public class SQLiteMiner {
             }
         }
     }
-
+    public static void saveObjectParameters(List<ObjectParameters> objectParameters) {
+        Transaction transaction = null;
+        try (Session session = sessionFactory.openSession()){
+            //session.createNativeQuery("SELECT 1").getSingleResult();
+            transaction = session.beginTransaction();
+            for (ObjectParameters objectParameter :objectParameters) {
+                logger.info("Сохраняем ObjectParameters с id: {}", objectParameter.Id);
+                session.persist(objectParameter);
+            }
+            transaction.commit();
+            logger.info("ObjectParameters успешно сохранены");
+        } catch (Exception e) {
+            if(transaction != null){
+                transaction.rollback();
+            }
+            logger.error("Ошибка при сохранении ObjectParameters", e);
+            e.printStackTrace();
+        }
+    }
     public static void updatePlant(Plant plant) {
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
@@ -391,7 +415,38 @@ public class SQLiteMiner {
             e.printStackTrace();
         }
     }
+    public static void saveItems(List<Item> items) {
+        Transaction transaction = null;
+        try (Session session = sessionFactory.openSession()) {
+            transaction = session.beginTransaction();
+            for (Item item : items){
+                session.persist(item);
 
+            }
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+    }
+    public static void saveMethods(List<CalculationMethod> methods) {
+        Transaction transaction = null;
+        try (Session session = sessionFactory.openSession()) {
+            transaction = session.beginTransaction();
+            for (CalculationMethod method : methods){
+                session.persist(method);
+
+            }
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+    }
     public static void saveItem(Item item) {
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {

@@ -4,18 +4,11 @@ import java.util.List;
 
 import com.udel.dataMiner.dataModel.enums.ObjectTypes;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name="objects")
-public class Object {
+public class ObjectEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,13 +25,15 @@ public class Object {
     @Column(name="object_type")
     public ObjectTypes ObjectType;
 
-    @Column(name = "parent_object")
-    public Object ParentObject;
+    // 🔹 Ссылка на родителя
+    @ManyToOne
+    @JoinColumn(name = "parent_object", nullable = true)
+    public ObjectEntity ParentObject;
 
-    public Object() {
+    public ObjectEntity() {
     }
 
-    public Object(int Id, String Name, String Description, List<Line> Lines, ObjectTypes ObjectType, List<Item> Items) {
+    public ObjectEntity(int Id, String Name, String Description, ObjectTypes ObjectType) {
         this.Id = Id;
         this.Name = Name;
         this.Description = Description;

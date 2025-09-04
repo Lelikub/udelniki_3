@@ -5,11 +5,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.udel.dataMiner.dataModel.Condition;
-import com.udel.dataMiner.dataModel.Item;
-import com.udel.dataMiner.dataModel.Line;
-import com.udel.dataMiner.dataModel.Mode;
-import com.udel.dataMiner.dataModel.Plant;
+import com.udel.dataMiner.dataModel.*;
+import com.udel.dataMiner.dataModel.enums.ObjectTypes;
 import com.udel.dataMiner.dataModel.enums.PlantGroup;
 import com.udel.dataMiner.dataModel.enums.TypeOfCost;
 import com.udel.dataMiner.dataModel.enums.TypeOfNatural;
@@ -21,10 +18,12 @@ import com.udel.dataMiner.dataModel.tabelsForCalc.naturals.OnlyProcent;
 
 public class DataTakerClass {
     private List<Plant> Plants;
-    private Map<String, Object> data = new LinkedHashMap<>(); 
+    private Map<String, Object> data = new LinkedHashMap<>();
 
     public DataTakerClass(){
-        //TestDataBaseSeed();
+        /// Заполнить базу данных
+        TestDataBaseSeed();
+        /// Получить все данные из бд
         DataTakerFromSQlite();
     }
 
@@ -39,167 +38,187 @@ public class DataTakerClass {
     }
 
     private void TestDataBaseSeed(){
-        Plant plant = new Plant();
-        plant.Name = "УСК";
-        plant.Description = "Установка Стабилизации Конденсата";
-        plant.PlantGroup = PlantGroup.PLANT;
-        
-        Line line1 = new Line();
-        line1.Name = "Линия 1";
+        ObjectEntity ysk = new ObjectEntity();
+        ysk.Name = "УСК";
+        ysk.Description = "Установка Стабилизации Конденсата";
+        ysk.ObjectType = ObjectTypes.PLANT;
+
+        ObjectEntity line1 = new ObjectEntity();
+        line1.Name =  "Линия 1";
         line1.Description = "УСК Линия 1";
-        line1.PlantName = plant.Name;
-        line1.Plant = plant;
+        line1.ObjectType = ObjectTypes.LINE;
+        line1.ParentObject = ysk;
 
-        Line line2 = new Line();
-        line2.Name = "Линия 2";
+        ObjectEntity line2 = new ObjectEntity();
+        line2.Name =  "Линия 2";
         line2.Description = "УСК Линия 2";
-        line2.PlantName = plant.Name;
-        line2.Plant = plant;
+        line2.ObjectType = ObjectTypes.LINE;
+        line2.ParentObject = ysk;
 
-        Item item1 = new Item();
-        item1.Name = "Технологическая Электроэнергия";
-        item1.Description = "Описание";
-        item1.Line = line1;
-        item1.NaturalCalc = TypeOfNatural.NaturalAndProcent;
-        item1.CostCalc = TypeOfCost.CostAndKoef;
+        SQLiteMiner.saveObjects(List.of(ysk, line1,line2));
 
-        Item item2 = new Item();
-        item2.Name = "Технологическая Электроэнергия";
-        item2.Description = "Описание";
-        item2.Line = line2;
-        item2.NaturalCalc = TypeOfNatural.NaturalAndProcent;
-        item2.CostCalc = TypeOfCost.CostAndKoef;
 
-        Item item3 = new Item();
-        item3.Name = "ГСН";
-        item3.Description = "Описание";
-        item3.Line = line1;
-        item3.NaturalCalc = TypeOfNatural.Natural;
-        item3.CostCalc = TypeOfCost.OnlyCost;
-
-        Item item4 = new Item();
-        item4.Name = "ГСН";
-        item4.Description = "Описание";
-        item4.Line = line2;
-        item4.NaturalCalc = TypeOfNatural.Natural;
-        item4.CostCalc = TypeOfCost.OnlyCost;
-
-        Item item5 = new Item();
-        item5.Name = "Вспомогательная Электроэнергия";
-        item5.Description = "Описание";
-        item5.Plant = plant;
-        item5.NaturalCalc = TypeOfNatural.NaturalAndProcent;
-        item5.CostCalc = TypeOfCost.CostAndKoef;
-
-        Item item6 = new Item();
-        item6.Name = "Отопление";
-        item6.Description = "Описание";
-        item6.Plant = plant;
-        item6.NaturalCalc = TypeOfNatural.OnlyProcent;
-        item6.CostCalc = TypeOfCost.OnlyCost;
-
-        Condition condition1 = new Condition();
-        condition1.Name = "Работа";
-        condition1.Description = "Режим работы";
-        condition1.Line = line1;
-        Condition condition2 = new Condition();
-        condition2.Name = "Ремонт";
-        condition2.Description = "Режим ремонта";
-        condition2.Line = line1;
-        Condition condition3 = new Condition();
-        condition3.Name = "Простой";
-        condition3.Description = "Режим простоя";
-        condition3.Line = line1;
-
-        Condition condition4 = new Condition();
-        condition4.Name = "Работа";
-        condition4.Description = "Режим работы";
-        condition4.Line = line2;
-        Condition condition5 = new Condition();
-        condition5.Name = "Ремонт";
-        condition5.Description = "Режим ремонта";
-        condition5.Line = line2;
-        Condition condition6 = new Condition();
-        condition6.Name = "Простой";
-        condition6.Description = "Режим простоя";
-        condition6.Line = line2;
-
-        Mode mode1 = new Mode();
-        mode1.Name = "ДК";
-        mode1.Line = line1;
-        Mode mode2 = new Mode();
-        mode2.Name = "СК(ДТ)";
-        mode2.Line = line1;
-        Mode mode3 = new Mode();
-        mode3.Name = "СК(ТС-1)";
-        mode3.Line = line1;
-        Mode mode4 = new Mode();
-        mode4.Name = "Лег.СК";
-        mode4.Line = line1;
-
-        Mode mode5 = new Mode();
-        mode5.Name = "ДК";
-        mode5.Line = line2;
-        Mode mode6 = new Mode();
-        mode6.Name = "СК(ДТ)";
-        mode6.Line = line2;
-        Mode mode7 = new Mode();
-        mode7.Name = "СК(ТС-1)";
-        mode7.Line = line2;
-        Mode mode8 = new Mode();
-        mode8.Name = "Лег.СК";
-        mode8.Line = line2;
-
-        List<Mode> modes1 = new ArrayList<>();
-        modes1.add(mode1);
-        modes1.add(mode2);
-        modes1.add(mode3);
-        modes1.add(mode4);
-        line1.Modes = modes1;
-
-        List<Mode> modes2 = new ArrayList<>();
-        modes2.add(mode5);
-        modes2.add(mode6);
-        modes2.add(mode7);
-        modes2.add(mode8);
-        line2.Modes = modes2;
-
-        List<Condition> conditions1 = new ArrayList<>();
-        conditions1.add(condition1);
-        conditions1.add(condition2);
-        conditions1.add(condition3);
-        line1.Conditions = conditions1;
-
-        List<Condition> conditions2 = new ArrayList<>();
-        conditions2.add(condition4);
-        conditions2.add(condition5);
-        conditions2.add(condition6);
-        line2.Conditions = conditions2;
-
-        List<Item> items1 = new ArrayList<>();
-        items1.add(item1);
-        items1.add(item3);
-        line1.Items = items1;
-        List<Item> items2 = new ArrayList<>();
-        items2.add(item2);
-        items2.add(item4);
-        line2.Items = items2;
-        List<Item> items3 = new ArrayList<>();
-        items3.add(item5);
-        items3.add(item6);
-        plant.Items =items3;
-        
-        List<Line> lines = new ArrayList<>();
-        lines.add(line1);
-        lines.add(line2);
-        plant.Lines = lines;
-
-        //SQLiteMiner.savePlant(plant);
-
-        List<Plant> testPlants = new ArrayList<>();
-        testPlants.add(plant);
-
-        TestCalcSeedData(testPlants);
+//        Plant plant = new Plant();
+//        plant.Name = "УСК";
+//        plant.Description = "Установка Стабилизации Конденсата";
+//        plant.PlantGroup = PlantGroup.PLANT;
+//
+//        Line line1 = new Line();
+//        line1.Name = "Линия 1";
+//        line1.Description = "УСК Линия 1";
+//        line1.PlantName = plant.Name;
+//        line1.Plant = plant;
+//
+//        Line line2 = new Line();
+//        line2.Name = "Линия 2";
+//        line2.Description = "УСК Линия 2";
+//        line2.PlantName = plant.Name;
+//        line2.Plant = plant;
+//
+//        Item item1 = new Item();
+//        item1.Name = "Технологическая Электроэнергия";
+//        item1.Description = "Описание";
+//        item1.Line = line1;
+//        item1.NaturalCalc = TypeOfNatural.NaturalAndProcent;
+//        item1.CostCalc = TypeOfCost.CostAndKoef;
+//
+//        Item item2 = new Item();
+//        item2.Name = "Технологическая Электроэнергия";
+//        item2.Description = "Описание";
+//        item2.Line = line2;
+//        item2.NaturalCalc = TypeOfNatural.NaturalAndProcent;
+//        item2.CostCalc = TypeOfCost.CostAndKoef;
+//
+//        Item item3 = new Item();
+//        item3.Name = "ГСН";
+//        item3.Description = "Описание";
+//        item3.Line = line1;
+//        item3.NaturalCalc = TypeOfNatural.Natural;
+//        item3.CostCalc = TypeOfCost.OnlyCost;
+//
+//        Item item4 = new Item();
+//        item4.Name = "ГСН";
+//        item4.Description = "Описание";
+//        item4.Line = line2;
+//        item4.NaturalCalc = TypeOfNatural.Natural;
+//        item4.CostCalc = TypeOfCost.OnlyCost;
+//
+//        Item item5 = new Item();
+//        item5.Name = "Вспомогательная Электроэнергия";
+//        item5.Description = "Описание";
+//        item5.Plant = plant;
+//        item5.NaturalCalc = TypeOfNatural.NaturalAndProcent;
+//        item5.CostCalc = TypeOfCost.CostAndKoef;
+//
+//        Item item6 = new Item();
+//        item6.Name = "Отопление";
+//        item6.Description = "Описание";
+//        item6.Plant = plant;
+//        item6.NaturalCalc = TypeOfNatural.OnlyProcent;
+//        item6.CostCalc = TypeOfCost.OnlyCost;
+//
+//        Condition condition1 = new Condition();
+//        condition1.Name = "Работа";
+//        condition1.Description = "Режим работы";
+//        condition1.Line = line1;
+//        Condition condition2 = new Condition();
+//        condition2.Name = "Ремонт";
+//        condition2.Description = "Режим ремонта";
+//        condition2.Line = line1;
+//        Condition condition3 = new Condition();
+//        condition3.Name = "Простой";
+//        condition3.Description = "Режим простоя";
+//        condition3.Line = line1;
+//
+//        Condition condition4 = new Condition();
+//        condition4.Name = "Работа";
+//        condition4.Description = "Режим работы";
+//        condition4.Line = line2;
+//        Condition condition5 = new Condition();
+//        condition5.Name = "Ремонт";
+//        condition5.Description = "Режим ремонта";
+//        condition5.Line = line2;
+//        Condition condition6 = new Condition();
+//        condition6.Name = "Простой";
+//        condition6.Description = "Режим простоя";
+//        condition6.Line = line2;
+//
+//        Mode mode1 = new Mode();
+//        mode1.Name = "ДК";
+//        mode1.Line = line1;
+//        Mode mode2 = new Mode();
+//        mode2.Name = "СК(ДТ)";
+//        mode2.Line = line1;
+//        Mode mode3 = new Mode();
+//        mode3.Name = "СК(ТС-1)";
+//        mode3.Line = line1;
+//        Mode mode4 = new Mode();
+//        mode4.Name = "Лег.СК";
+//        mode4.Line = line1;
+//
+//        Mode mode5 = new Mode();
+//        mode5.Name = "ДК";
+//        mode5.Line = line2;
+//        Mode mode6 = new Mode();
+//        mode6.Name = "СК(ДТ)";
+//        mode6.Line = line2;
+//        Mode mode7 = new Mode();
+//        mode7.Name = "СК(ТС-1)";
+//        mode7.Line = line2;
+//        Mode mode8 = new Mode();
+//        mode8.Name = "Лег.СК";
+//        mode8.Line = line2;
+//
+//        List<Mode> modes1 = new ArrayList<>();
+//        modes1.add(mode1);
+//        modes1.add(mode2);
+//        modes1.add(mode3);
+//        modes1.add(mode4);
+//        line1.Modes = modes1;
+//
+//        List<Mode> modes2 = new ArrayList<>();
+//        modes2.add(mode5);
+//        modes2.add(mode6);
+//        modes2.add(mode7);
+//        modes2.add(mode8);
+//        line2.Modes = modes2;
+//
+//        List<Condition> conditions1 = new ArrayList<>();
+//        conditions1.add(condition1);
+//        conditions1.add(condition2);
+//        conditions1.add(condition3);
+//        line1.Conditions = conditions1;
+//
+//        List<Condition> conditions2 = new ArrayList<>();
+//        conditions2.add(condition4);
+//        conditions2.add(condition5);
+//        conditions2.add(condition6);
+//        line2.Conditions = conditions2;
+//
+//        List<Item> items1 = new ArrayList<>();
+//        items1.add(item1);
+//        items1.add(item3);
+//        line1.Items = items1;
+//        List<Item> items2 = new ArrayList<>();
+//        items2.add(item2);
+//        items2.add(item4);
+//        line2.Items = items2;
+//        List<Item> items3 = new ArrayList<>();
+//        items3.add(item5);
+//        items3.add(item6);
+//        plant.Items =items3;
+//
+//        List<Line> lines = new ArrayList<>();
+//        lines.add(line1);
+//        lines.add(line2);
+//        plant.Lines = lines;
+//
+//        SQLiteMiner.savePlant(plant);
+//
+//        List<Plant> testPlants = new ArrayList<>();
+//        testPlants.add(plant);
+//
+//        TestCalcSeedData(testPlants);
     }
 
     public Map<String, Object> ParsinById(List<Integer> InitMass){
@@ -215,7 +234,7 @@ public class DataTakerClass {
         return data;
     }
 
-    
+
     private void TestCalcSeedData(List<Plant> Plants){
         double[] _Palnt_Elec_Proc = {0.98, 0.8, 0.89, 0.96, 0.72, 0.87, 0.86, 0.92, 0.89, 1, 0.71, 0.78};
         double[] _Plant_Elec_Koef = {0.95, 0.98, 0.97, 0.97, 0.97, 0.98, 1, 1.02, 1.07, 1.03, 1.03, 1.03};
@@ -229,7 +248,7 @@ public class DataTakerClass {
         List<CostAdKoef> CostAdKoefs = new ArrayList<>();
         List<OnlyCost> OnlyCosts = new ArrayList<>();
         List<Inflation> Inflations = new ArrayList<>();
-        
+
         int temp;
         for (Plant Plant : Plants) {
             for (Item Item : Plant.Items) {
@@ -347,13 +366,13 @@ public class DataTakerClass {
             Inflations.add(new Inflation(0, "Инфляция", i + "", 1.0 + i * 0.03));
         }
 
-        for (Plant plant : Plants) 
+        for (Plant plant : Plants)
           SQLiteMiner.savePlant(plant);
         SQLiteMiner.saveCostAdKoef(CostAdKoefs);
         SQLiteMiner.saveInflation(Inflations);
         SQLiteMiner.saveOnlyCost(OnlyCosts);
         SQLiteMiner.saveNaturalAdProcent(NaturalAdProcents);
         SQLiteMiner.saveOnlyProcent(OnlyProcents);
-        
+
     }
 }

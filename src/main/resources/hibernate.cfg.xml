@@ -24,6 +24,7 @@
         <property name="hibernate.hbm2ddl.auto">update</property> <!-- Use "update" in development -->
 
         <!-- Mention your annotated entity classes -->
+        <mapping class="com.udel.dataMiner.dataModel.ObjectEntity"/>
         <mapping class="com.udel.dataMiner.dataModel.Plant"/>
         <mapping class="com.udel.dataMiner.dataModel.Line"/>
         <mapping class="com.udel.dataMiner.dataModel.Item"/>

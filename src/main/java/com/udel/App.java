@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.udel.dataFromIAK.CostParameter;
+import com.udel.dataMiner.SQLiteMiner;
 
 public final class App {
     private App() {
@@ -50,7 +51,8 @@ public final class App {
         TestParams.put(1, UskParams);
 
         UdelConectionClass test = new UdelConectionClass();
-
+        var objects = SQLiteMiner.getAllObjects();
+        var object = SQLiteMiner.getChildrenByObject(objects.stream().findFirst());
         test.UdelItitial(TestInitList);
 
         test.UdelCalculationProvider(TestParams);

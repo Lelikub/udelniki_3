@@ -1,7 +1,10 @@
 package com.udel.dataMiner;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
+import com.udel.dataMiner.dataModel.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -10,11 +13,6 @@ import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.udel.dataMiner.dataModel.Condition;
-import com.udel.dataMiner.dataModel.Item;
-import com.udel.dataMiner.dataModel.Line;
-import com.udel.dataMiner.dataModel.Mode;
-import com.udel.dataMiner.dataModel.Plant;
 import com.udel.dataMiner.dataModel.tabelsForCalc.costs.CostAdKoef;
 import com.udel.dataMiner.dataModel.tabelsForCalc.costs.Inflation;
 import com.udel.dataMiner.dataModel.tabelsForCalc.costs.OnlyCost;
@@ -36,7 +34,7 @@ public class SQLiteMiner {
         try {
             Configuration configuration = new Configuration().configure();
             sessionFactory = configuration.buildSessionFactory();
-        } 
+        }
         catch (Exception ex) {
             System.err.println("Failed to create sessionFactory object." + ex);
             ex.printStackTrace();
@@ -108,7 +106,7 @@ public class SQLiteMiner {
             return session.find(OnlyProcent.class, id);
         }
     }
-    
+
 
     public static List<Plant> getAllPlants(){
         try(Session session = sessionFactory.openSession()){
@@ -246,6 +244,75 @@ public class SQLiteMiner {
             }
             logger.error("Ошибка при сохранении Plant", e);
             e.printStackTrace();
+        }
+    }
+
+    /* Методы для таблицы objects */
+
+    public static void saveObject(ObjectEntity object) {
+        Transaction transaction = null;
+        try (Session session = sessionFactory.openSession()) {
+            transaction = session.beginTransaction();
+            logger.info("Сохраняем Object с Id: {}", object.Id);
+            session.persist(object);
+            transaction.commit();
+            logger.info("Успешное сохранение");
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            logger.error("Ошибка при сохранении Object", e);
+            e.printStackTrace();
+        }
+    }
+
+    public static void saveObjects(List<ObjectEntity> objects) {
+        Transaction transaction = null;
+        try (Session session = sessionFactory.openSession()) {
+            transaction = session.beginTransaction();
+
+            for (ObjectEntity obj : objects) {
+                logger.info("Сохраняем Object с Id: {}", obj.Id);
+                session.persist(obj);
+            }
+
+            transaction.commit();
+            logger.info("Успешное сохранение списка объектов");
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            logger.error("Ошибка при сохранении списка объектов", e);
+            e.printStackTrace();
+        }
+    }
+
+    public static List<ObjectEntity> getAllObjects() {
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("from ObjectEntity", ObjectEntity.class).list();
+        }
+    }
+
+    public static ObjectEntity getObjectById(int id) {
+        try (Session session = sessionFactory.openSession()) {
+            return session.find(ObjectEntity.class, id);
+        }
+    }
+
+    public static List<ObjectEntity> getChildrenByObject(Optional<ObjectEntity> parent) {
+        try (Session session = sessionFactory.openSession()) {
+            if (parent.isPresent()) {
+                return session.createQuery(
+                        "FROM ObjectEntity o WHERE o.ParentObject = :parent",
+                        ObjectEntity.class
+                    )
+                    .setParameter("parent", parent.get())
+                    .list();
+            }
+            else {
+                // родителя нет, можно вернуть пустой список
+                return Collections.emptyList();
+            }
         }
     }
 
@@ -414,7 +481,7 @@ public class SQLiteMiner {
             e.printStackTrace();
         }
     }
-    
+
     public static void saveCondition(Condition condition) {
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {

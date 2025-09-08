@@ -1,9 +1,11 @@
 package com.udel.dataMiner.dataModel;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import com.udel.dataMiner.dataModel.enums.ConditionType;
 import com.udel.dataMiner.dataModel.enums.ObjectTypes;
 
 import jakarta.persistence.*;
@@ -37,10 +39,8 @@ public class ObjectEntity {
     private List<ItemsInObject> itemsInObject = new ArrayList<>();
 
     @OneToMany(mappedBy = "Object", cascade = CascadeType.ALL, orphanRemoval= true, fetch= FetchType.EAGER)
-    private List<Condition> Conditions = new ArrayList<>();
-
-    @OneToMany(mappedBy = "Object", cascade = CascadeType.ALL, orphanRemoval= true, fetch= FetchType.EAGER)
     private List<Mode> Modes = new ArrayList<>();
+
 
     public ObjectEntity() {
     }
@@ -79,16 +79,6 @@ public class ObjectEntity {
     }
     public List<Mode> getModesInObjects() {
         return Modes;
-    }
-    public List<Condition> getConditionsInObjects() {
-        return Conditions;
-    }
-
-    public void addConditions(List<Condition> conditions) {
-        for (Condition condition  : conditions) {
-            Condition c = new Condition(0, condition.Name, condition.Description, condition.Object);
-            Conditions.add(c);
-        }
     }
 
     public void addModes(List<Mode> modes) {

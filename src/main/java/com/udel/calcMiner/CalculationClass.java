@@ -2,234 +2,139 @@ package com.udel.calcMiner;
 
 import java.util.*;
 
-import com.udel.dataFromIAK.CostParameter;
-import com.udel.dataMiner.dataModel.Item;
-import com.udel.dataMiner.dataModel.Line;
-import com.udel.dataMiner.dataModel.Plant;
-import com.udel.dataMiner.dataModel.tabelsForCalc.costs.CostAdKoef;
-import com.udel.dataMiner.dataModel.tabelsForCalc.costs.OnlyCost;
-import com.udel.dataMiner.dataModel.tabelsForCalc.naturals.NaturalAdProcent;
-import com.udel.dataMiner.dataModel.tabelsForCalc.naturals.OnlyProcent;
+import com.udel.dataMiner.DataTakerClass;
+import com.udel.dataMiner.dataModel.*;
+import com.udel.dataMiner.dataModel.enums.CalculationType;
+import com.udel.dataMiner.dataModel.enums.ConditionType;
 import com.udel.objectModel.ObjectLine;
+import com.udel.objectModel.ObjectModel;
 import com.udel.objectModel.ObjectPlant;
 
 public class CalculationClass {
-    private Map<Integer, Object> IakData;
-    private Map<String, Object> ParsedData;
 
-    private Map<Integer ,Map<String, Double>> ItemsAndCosts = new HashMap<>();
-
-    private Set<ObjectPlant> plantsFromIAK = new HashSet<>();
-    private Set<ObjectLine> linesFromIAK = new HashSet<>();
+    private DataTakerClass AllData = new DataTakerClass();
 
     public CalculationClass(){
     }
 
-    public CalculationClass(Map<Integer, Object> IakData, Map<String, Object> ParsedData){
-        this.IakData = IakData;
-        this.ParsedData = ParsedData;
-    }
+    public Map<Integer, Map<String, Double>> StartAllCalculations(Set<ObjectModel> objectModels, Integer monthNumber) throws Exception {
 
-    public CalculationClass(Set<ObjectPlant> plantsFromIAK ,Set<ObjectLine> linesFromIAK, Map<String, Object> ParsedData){
-        this.plantsFromIAK = plantsFromIAK;
-        this.linesFromIAK = linesFromIAK;
-        this.ParsedData = ParsedData;
-    }
+        Map<Integer, Map<String, Double>> itemsAndCosts = new HashMap<>();
 
-    public Map<Integer ,Map<String, Double>> StartAllCalculations(){
-        List<String> KeysFromParsedData = new ArrayList<>();
-        List<String> ItemsList = new ArrayList<>();
-        List<Double> NaturaList = new ArrayList<>();
-        List<Double> CostsList = new ArrayList<>();
+        for (ObjectModel objectModel : objectModels)
+        {
+            ObjectEntity objectEntity = AllData.Objects.stream()
+                .filter(o->o.Id==objectModel.getId())
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Нет объекта в БД с id " + objectModel.getId()));
 
-        for (String key : ParsedData.keySet()) {
-            KeysFromParsedData.add(key);
-        }
-
-        List<Plant> ParsedPlants = (List<Plant>) ParsedData.get(KeysFromParsedData.get(KeysFromParsedData.size() - 1));
-
-        /*for (ObjectPlant plantFromIak : plantsFromIAK) {
-            if (linesFromIAK.stream().filter(l->l.getPlant_ID()==plantFromIak.getId()).noneMatch(ObjectLine::isEnable))
-                continue;
-            else {
-                for (Plant Plant : ParsedPlants) {
-                    if (Plant.Id == plantFromIak.getId()) {
-                        for (Item Item : Plant.Items) {
-                            switch (Item.NaturalCalc) {
-                                case NaturalAndProcent:
-                                    ItemsList.add(Plant.Name + " " + Item.Name);
-                                    NaturaList.add(NaturalAdProcent(Plant, Item, plantFromIak.getModelMonthNumber(), (List<NaturalAdProcent>) ParsedData.get("Натуральная показатель на процент")));
-                                    break;
-                                case OnlyProcent:
-                                    ItemsList.add(Plant.Name + " " + Item.Name);
-                                    NaturaList.add(plantFromIak.getGnsForHeat() * OnlyProcent(Plant, Item, (List<OnlyProcent>) ParsedData.get("Только процентный показатель")));
-                                    break;
-                                case Natural:
-                                    //ItemsList.add(Plant.Name + " " +Item.Name);
-                                    //CostsList.add(e);
-                                    break;
-                                default:
-                                    throw new AssertionError();
-                            }
-                            switch (Item.CostCalc) {
-                                case CostAndKoef:
-                                    CostsList.add(CostAdKoef(Plant, plantFromIak.getModelMonthNumber(), Item, (List<CostAdKoef>) ParsedData.get("Стоимость на коеффициент")));
-                                    break;
-                                case OnlyCost:
-                                    CostsList.add(OnlyCost(Plant, Item, (List<OnlyCost>) ParsedData.get("Только стоимость")));
-                                    break;
-                                default:
-                                    throw new AssertionError();
-                            }
-                        }
-                        for (ObjectLine objLine : linesFromIAK) {
-                            for (Line Line : Plant.Lines) {
-                                if (Line.Id == objLine.getId()) {
-                                    for (Item Item : Line.Items) {
-                                        switch (Item.NaturalCalc) {
-                                            case NaturalAndProcent:
-                                                ItemsList.add(Line.Description + " " + Item.Name);
-                                                NaturaList.add(NaturalAdProcent(Line, objLine, Item, (List<NaturalAdProcent>) ParsedData.get("Натуральная показатель на процент")));
-                                                break;
-                                            case OnlyProcent:
-                                                //ItemsList.add(Line.Description + " " + Item.Name);
-                                                //CostsList
-                                                break;
-                                            case Natural:
-                                                if (objLine.isEnable()) {
-                                                    ItemsList.add(Line.Description + " " + Item.Name);
-                                                    NaturaList.add(objLine.getGnsForHeat());
-                                                }
-                                                break;
-                                            default:
-                                                throw new AssertionError();
-                                        }
-                                        switch (Item.CostCalc) {
-                                            case CostAndKoef:
-                                                CostsList.add(CostAdKoef(Line, objLine, Item, (List<CostAdKoef>) ParsedData.get("Стоимость на коеффициент")));
-                                                break;
-                                            case OnlyCost:
-                                                CostsList.add(OnlyCost(Line, objLine, Item, (List<OnlyCost>) ParsedData.get("Только стоимость")));
-                                                break;
-                                            default:
-                                                throw new AssertionError();
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        ItemsAndCosts.put(plantFromIak.getId(), new LinkedHashMap<>());
-                        Map<String, Double> tempItems = new LinkedHashMap<>();
-                        for (int i = 0; i < ItemsList.size(); i++)
-                            tempItems.put(ItemsList.get(i), NaturaList.get(i) * CostsList.get(i));
-                        ItemsAndCosts.get(plantFromIak.getId()).putAll(tempItems);
-                    }
-                }
+            Map<String, Double> itemCosts = new HashMap<>();
+            for (ItemsInObject itemsInObject : objectEntity.getItemsInObjects())
+            {
+                double cost = switch (itemsInObject.getCalculationMethod().getType()) {
+                    case NaturalProcentCostKoef -> calculateNaturalProcentCostKoef(objectModel, objectEntity, itemsInObject, monthNumber);
+                    case ParameterProcentCost   -> calculateParameterProcentCost(objectModel, objectEntity, itemsInObject);
+                    case ParameterCost          -> calculateParameterCost(objectModel, objectEntity, itemsInObject, monthNumber);
+                };
+                itemCosts.put(itemsInObject.getItem().Name, cost);
             }
-        }*/
-        return ItemsAndCosts;
-    }
-
-    @Override
-    public String toString(){
-        String output = "";
-        for (Integer key : ItemsAndCosts.keySet()) {
-            output += "id - " + key + "\n";
-            for (String ItemKey : ItemsAndCosts.get(key).keySet())
-                output += "\t " + ItemKey + " - " + ItemsAndCosts.get(key).get(ItemKey) + "\n";
-
+            itemsAndCosts.put(objectModel.getId(),itemCosts);
         }
-        return output;
+        return itemsAndCosts;
     }
 
-    private Double NaturalAdProcent(Plant Plant, Item Item, int monthNumber,List<NaturalAdProcent> NaturalAdProcents){
-        for (NaturalAdProcent oneNatur : NaturalAdProcents) {
-            if(oneNatur.Name.equals(Item.Name) && oneNatur.Description.equals(Plant.Name + " " + monthNumber))
-                return oneNatur.Natural * oneNatur.Procent;
+    private double calculateNaturalProcentCostKoef(
+        ObjectModel objectModel,
+        ObjectEntity objectEntity,
+        ItemsInObject itemsInObject,
+        int monthNumber
+    ) {
+        String description = buildDescription(objectModel, objectEntity, monthNumber, CalculationType.NaturalProcentCostKoef);
+        System.out.println(description);
+        ObjectParameters params = findParameters(itemsInObject.getItem().Name, description);
+
+        return params.Natural * params.Procent * params.Cost * params.Koef;
+    }
+    private double calculateParameterProcentCost(
+        ObjectModel objectModel,
+        ObjectEntity objectEntity,
+        ItemsInObject itemsInObject
+    ) {
+        ObjectParameters params = findParameters(itemsInObject.getItem().Name, objectEntity.Name);
+
+        double parameter = 0.0;
+        ModelParameters param1 = itemsInObject.getParameter1();
+        if (param1 != null) {
+            parameter = objectModel.getObjectModelParameters().getOrDefault(param1.Id, 0.0);
         }
-        return 0.0;
+
+        return parameter * params.Procent * params.Cost;
     }
 
-//    private Double NaturalAdProcent(Line Line, ObjectLine objLine, Item Item, List<NaturalAdProcent> NaturalAdProcents){
-//        for (NaturalAdProcent oneNatur : NaturalAdProcents) {
-//            if(objLine.isEnable()){
-//                if(oneNatur.Name.equals(Item.Name) && oneNatur.Description.equals(Line.Description + " " + "Работа" + " " + Line.Modes.get(objLine.getModeId()).Name + " " + objLine.getModelMonthNumber())){
-//                        return oneNatur.Natural * oneNatur.Procent;
-//                }
-//            }
-//            else{
-//                if(oneNatur.Name.equals(Item.Name) && oneNatur.Description.equals(Line.Description + " " + "Ремонт" + " " + objLine.getModelMonthNumber())){
-//                    return oneNatur.Natural * oneNatur.Procent;
-//                }
-//            }
-//        }
-//        return 0.0;
-//    }
-//
-//    private Double OnlyProcent(Plant Plant, Item Item, List<OnlyProcent> OnlyProcents){
-//        for (OnlyProcent oneProcent : OnlyProcents) {
-//            if(oneProcent.Nmae.equals(Item.Name) && oneProcent.Description.equals(Plant.Name))
-//                return oneProcent.Procent;
-//        }
-//        return 0.0;
-//    }
-//
-//    private Double OnlyProcent(Line Line, Item Item, List<OnlyProcent> OnlyProcents){
-//        for (OnlyProcent oneProcent : OnlyProcents) {
-//
-//        }
-//        return 0.0;
-//    }
-//
-//
-//    private double Natural(Plant Plant, Item Item, double NaturalParam){
-//
-//        return 0;
-//    }
-//
-//    private Double CostAdKoef(Plant Plant, int monthNumber, Item Item, List<CostAdKoef> CostAdKoefs){
-//        for (CostAdKoef cost : CostAdKoefs) {
-//            if(cost.Name.equals(Item.Name) && cost.Description.equals(Plant.Name + " " + monthNumber))
-//                return cost.Cost * cost.Koef;
-//        }
-//        return 0.0;
-//    }
-//
-//    private Double CostAdKoef(Line Line, ObjectLine objectLine, Item Item, List<CostAdKoef> CostAdKoefs){
-//        for (CostAdKoef cost : CostAdKoefs) {
-//            if(objectLine.isEnable()){
-//                if(cost.Name.equals(Item.Name) && cost.Description.equals(Line.Description + " " + "Работа" + " " + Line.Modes.get(objectLine.getModeId()).Name + " " + objectLine.getModelMonthNumber()))
-//                    return cost.Cost * cost.Koef;
-//
-//            }
-//            else{
-//                if(cost.Name.equals(Item.Name) && cost.Description.equals(Line.Description + " " + "Ремонт" + " " + objectLine.getModelMonthNumber()))
-//                    return cost.Cost * cost.Koef;
-//            }
-//        }
-//        return 0.0;
-//    }
-//
-//    private Double OnlyCost(Plant Plant, Item Item, List<OnlyCost> OnlyCosts){
-//        for (OnlyCost cost : OnlyCosts) {
-//            if(cost.Name.equals(Item.Name) && cost.Description.equals(Plant.Name))
-//                return cost.Cost;
-//        }
-//        return 0.0;
-//    }
-//
-//    private Double OnlyCost(Line Line, ObjectLine objLine, Item Item, List<OnlyCost> OnlyCosts){
-//        for (OnlyCost cost : OnlyCosts) {
-//            if(objLine.isEnable()){
-//                if(cost.Name.equals(Item.Name) && cost.Description.equals(Line.Description + " " + "Работа" + " " + Line.Modes.get(objLine.getModeId()).Name))
-//                        return cost.Cost;
-//            }
-//            else{
-//                if(cost.Name.equals(Item.Name) && cost.Description.equals(Line.Description + " " + "Ремонт"))
-//                    return cost.Cost;
-//            }
-//        }
-//        return 0.0;
-//    }
+    private double calculateParameterCost(
+        ObjectModel objectModel,
+        ObjectEntity objectEntity,
+        ItemsInObject itemsInObject,
+        int monthNumber
+    ) {
+        String description = buildDescription(objectModel, objectEntity, monthNumber, CalculationType.ParameterCost);
+        System.out.println(description);
 
+        ObjectParameters params = findParameters(itemsInObject.getItem().Name, description);
+
+        double parameter = 0.0;
+        ModelParameters param = itemsInObject.getParameter1();
+        if (param != null) {
+            parameter = objectModel.getObjectModelParameters().getOrDefault(param.Id, 0.0);
+        }
+
+        return parameter * params.Cost;
+    }
+
+    public String buildDescription(ObjectModel objectModel, ObjectEntity objectEntity, Integer monthNumber, CalculationType calculationType)
+    {
+        switch (calculationType){
+            case NaturalProcentCostKoef:
+                if (objectModel instanceof ObjectPlant plant)
+                {
+                    return (plant.getName() + " " + monthNumber);
+                }
+                else if (objectModel instanceof ObjectLine line)
+                {
+                    if (line.getConditionType() == ConditionType.Work)
+                        return (line.getName() + " " + line.getConditionType() + " " + objectEntity.getModesInObjects().get(line.getModeId()).Name + " " + monthNumber);
+                    else
+                        return (line.getName() + " " + line.getConditionType() + " " + monthNumber);
+                }
+                break;
+            case ParameterCost:
+                if (objectModel instanceof ObjectLine line)
+                {
+                    if (line.getConditionType() == ConditionType.Work)
+                        return (line.getName() + " " + line.getConditionType() + " " + objectEntity.getModesInObjects().get(line.getModeId()).Name);
+                    else
+                        return (line.getName() + " " + line.getConditionType());
+                }
+                break;
+        }
+        return "";
+    }
+
+    private ObjectParameters findParameters(String name, String description) {
+        return AllData.ObjectParameters.stream()
+            .filter(o -> Objects.equals(o.Name, name) && Objects.equals(o.Description, description))
+            .findFirst()
+            .orElseThrow(() -> new IllegalStateException("Не найдены параметры для " + name + " - " + description));
+    }
+
+    public String toString(Map<Integer, Map<String, Double>> itemsAndCosts) {
+        StringBuilder sb = new StringBuilder();
+        for (var entry : itemsAndCosts.entrySet()) {
+            sb.append("id - ").append(entry.getKey()).append("\n");
+            entry.getValue().forEach((item, cost) ->
+                sb.append("\t").append(item).append(" - ").append(cost).append("\n")
+            );
+        }
+        return sb.toString();
+    }
 }

@@ -13,11 +13,7 @@ import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.udel.dataMiner.dataModel.tabelsForCalc.costs.CostAdKoef;
-import com.udel.dataMiner.dataModel.tabelsForCalc.costs.Inflation;
-import com.udel.dataMiner.dataModel.tabelsForCalc.costs.OnlyCost;
-import com.udel.dataMiner.dataModel.tabelsForCalc.naturals.NaturalAdProcent;
-import com.udel.dataMiner.dataModel.tabelsForCalc.naturals.OnlyProcent;
+import com.udel.dataMiner.dataModel.tablesForCalc.costs.Inflation;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -43,22 +39,6 @@ public class SQLiteMiner {
     }
 
 
-    public static Plant getPlantById(int id){
-        try(Session session = sessionFactory.openSession()){
-            return session.find(Plant.class, id);
-        }
-    }
-
-    public static Line getLineById(int id){
-        try(Session session = sessionFactory.openSession()){
-            Line line = session.find(Line.class, id);
-            if(line != null){
-                line.Conditions = getAllConditions();
-            }
-            return line;
-        }
-    }
-
     public static Item getItemById(int id){
         try(Session session = sessionFactory.openSession()){
             return session.find(Item.class, id);
@@ -77,11 +57,7 @@ public class SQLiteMiner {
         }
     }
 
-    public static CostAdKoef getCostAdKoefById(int id){
-        try(Session session = sessionFactory.openSession()){
-            return session.find(CostAdKoef.class, id);
-        }
-    }
+
 
     public static Inflation getInflationById(int id){
         try(Session session = sessionFactory.openSession()){
@@ -89,50 +65,6 @@ public class SQLiteMiner {
         }
     }
 
-    public static OnlyCost getOnlyCostById(int id){
-        try(Session session = sessionFactory.openSession()){
-            return session.find(OnlyCost.class, id);
-        }
-    }
-
-    public static NaturalAdProcent getNaturalAdProcentById(int id){
-        try(Session session = sessionFactory.openSession()){
-            return session.find(NaturalAdProcent.class, id);
-        }
-    }
-
-    public static OnlyProcent getOnlyProcentById(int id){
-        try(Session session = sessionFactory.openSession()){
-            return session.find(OnlyProcent.class, id);
-        }
-    }
-
-
-    public static List<Plant> getAllPlants(){
-        try(Session session = sessionFactory.openSession()){
-            CriteriaBuilder cb = session.getCriteriaBuilder();
-            CriteriaQuery<Plant> cq = cb.createQuery(Plant.class);
-            Root<Plant> rootEntry = cq.from(Plant.class);
-            //rootEntry.fetch("Lines", JoinType.LEFT);
-            //rootEntry.fetch("Items", JoinType.LEFT);
-            CriteriaQuery<Plant> all = cq.select(rootEntry);
-            Query<Plant> query = session.createQuery(all);
-            return query.list();
-        }
-    }
-
-    public static List<Line> getAllLines(){
-        try(Session session = sessionFactory.openSession()){
-            CriteriaBuilder cb = session.getCriteriaBuilder();
-            CriteriaQuery<Line> cq = cb.createQuery(Line.class);
-            Root<Line> rootEntry = cq.from(Line.class);
-            //rootEntry.fetch("items", JoinType.LEFT);
-            //rootEntry.fetch("modes", JoinType.LEFT);
-            CriteriaQuery<Line> all = cq.select(rootEntry);
-            Query<Line> query = session.createQuery(all);
-            return query.list();
-        }
-    }
 
     public static List<Item> getAllItems(){
         try(Session session = sessionFactory.openSession()){
@@ -170,17 +102,7 @@ public class SQLiteMiner {
         }
     }
 
-    public static List<CostAdKoef> getAllCostAdKoef(){
-        try(Session session = sessionFactory.openSession()){
-            CriteriaBuilder cb = session.getCriteriaBuilder();
-            CriteriaQuery<CostAdKoef> cq = cb.createQuery(CostAdKoef.class);
-            Root<CostAdKoef> rootEntry = cq.from(CostAdKoef.class);
-            CriteriaQuery<CostAdKoef> all = cq.select(rootEntry);
 
-            Query<CostAdKoef> query = session.createQuery(all);
-            return query.list();
-        }
-    }
 
     public static List<Inflation> getAllInflation(){
         try(Session session = sessionFactory.openSession()){
@@ -194,58 +116,25 @@ public class SQLiteMiner {
         }
     }
 
-    public static List<OnlyCost> getAllOnlyCost(){
-        try(Session session = sessionFactory.openSession()){
-            CriteriaBuilder cb = session.getCriteriaBuilder();
-            CriteriaQuery<OnlyCost> cq = cb.createQuery(OnlyCost.class);
-            Root<OnlyCost> rootEntry = cq.from(OnlyCost.class);
-            CriteriaQuery<OnlyCost> all = cq.select(rootEntry);
 
-            Query<OnlyCost> query = session.createQuery(all);
-            return query.list();
-        }
-    }
 
-    public static List<NaturalAdProcent> getAllNaturalAdProcent(){
-        try(Session session = sessionFactory.openSession()){
-            CriteriaBuilder cb = session.getCriteriaBuilder();
-            CriteriaQuery<NaturalAdProcent> cq = cb.createQuery(NaturalAdProcent.class);
-            Root<NaturalAdProcent> rootEntry = cq.from(NaturalAdProcent.class);
-            CriteriaQuery<NaturalAdProcent> all = cq.select(rootEntry);
 
-            Query<NaturalAdProcent> query = session.createQuery(all);
-            return query.list();
-        }
-    }
-
-    public static List<OnlyProcent> getAllOnlyProcent(){
-        try(Session session = sessionFactory.openSession()){
-            CriteriaBuilder cb = session.getCriteriaBuilder();
-            CriteriaQuery<OnlyProcent> cq = cb.createQuery(OnlyProcent.class);
-            Root<OnlyProcent> rootEntry = cq.from(OnlyProcent.class);
-            CriteriaQuery<OnlyProcent> all = cq.select(rootEntry);
-
-            Query<OnlyProcent> query = session.createQuery(all);
-            return query.list();
-        }
-    }
-
-    public static void savePlant(Plant plant) {
+    public static <T> void saveEntities(List<T> entities) {
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
-            logger.info("Сохраняем Plant с Id: {}", plant.Id);
-            session.persist(plant);
+            for (T entity : entities) {
+                session.persist(entity);
+            }
             transaction.commit();
-            logger.info("Успешное сохранение");
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
             }
-            logger.error("Ошибка при сохранении Plant", e);
             e.printStackTrace();
         }
     }
+
 
     /* Методы для таблицы objects */
 
@@ -340,113 +229,7 @@ public class SQLiteMiner {
             e.printStackTrace();
         }
     }
-    public static void updatePlant(Plant plant) {
-        Transaction transaction = null;
-        try (Session session = sessionFactory.openSession()) {
-            transaction = session.beginTransaction();
-            session.merge(plant);
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        }
-    }
 
-    public static void deletePlant(int plantId) {
-        Transaction transaction = null;
-        try (Session session = sessionFactory.openSession()) {
-            transaction = session.beginTransaction();
-            Plant plant = session.find(Plant.class, plantId);
-            if (plant != null) {
-                session.remove(plant);
-            }
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        }
-    }
-
-    public static void saveLine(Line line) {
-        Transaction transaction = null;
-        try (Session session = sessionFactory.openSession()) {
-            transaction = session.beginTransaction();
-            session.persist(line);
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        }
-    }
-
-    public static void updateLine(Line line) {
-        Transaction transaction = null;
-        try (Session session = sessionFactory.openSession()) {
-            transaction = session.beginTransaction();
-            session.merge(line);
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        }
-    }
-
-    public static void deleteLine(int lineId) {
-        Transaction transaction = null;
-        try (Session session = sessionFactory.openSession()) {
-            transaction = session.beginTransaction();
-            Line line = session.find(Line.class, lineId); // Современный способ
-            if (line != null) {
-                session.remove(line);
-            }
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        }
-    }
-    public static void saveItems(List<Item> items) {
-        Transaction transaction = null;
-        try (Session session = sessionFactory.openSession()) {
-            transaction = session.beginTransaction();
-            for (Item item : items){
-                session.persist(item);
-
-            }
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        }
-    }
-    public static void saveMethods(List<CalculationMethod> methods) {
-        Transaction transaction = null;
-        try (Session session = sessionFactory.openSession()) {
-            transaction = session.beginTransaction();
-            for (CalculationMethod method : methods){
-                session.persist(method);
-
-            }
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        }
-    }
     public static void saveItem(Item item) {
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
@@ -582,73 +365,8 @@ public class SQLiteMiner {
         }
     }
 
-    public static void saveCostAdKoef(List<CostAdKoef> CostAdKoefs) {
-        Transaction transaction = null;
-        try (Session session = sessionFactory.openSession()){
-            //session.createNativeQuery("SELECT 1").getSingleResult();
-            transaction = session.beginTransaction();
-            for (CostAdKoef costAdKoef :CostAdKoefs) {
-                logger.info("Сохраняем CostAdKoef с id: {}", costAdKoef.Id);
-                session.persist(costAdKoef);
-            }
-            transaction.commit();
-            logger.info("CostAdKoefs успешно сохранены");
-        } catch (Exception e) {
-            if(transaction != null){
-                transaction.rollback();
-            }
-            logger.error("Ошибка при сохранении CostAdKoefs", e);
-            e.printStackTrace();
-        }
-    }
-
-    public static void saveCostAdKoef(CostAdKoef CostAdKoef) {
-        Transaction transaction = null;
-        try (Session session = sessionFactory.openSession()){
-            //session.createNativeQuery("SELECT 1").getSingleResult();
-            transaction = session.beginTransaction();
-            session.persist(CostAdKoef);
-            transaction.commit();
-        } catch (Exception e) {
-            if(transaction != null){
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        }
-    }
 
 
-
-    public static void updateCostAdKoef(CostAdKoef CostAdKoef) {
-        Transaction transaction = null;
-        try (Session session = sessionFactory.openSession()) {
-            transaction = session.beginTransaction();
-            session.merge(CostAdKoef);
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        }
-    }
-
-    public static void deleteCostAdKoef(int CostAdKoefId) {
-        Transaction transaction = null;
-        try (Session session = sessionFactory.openSession()) {
-            transaction = session.beginTransaction();
-            CostAdKoef CostAdKoef = session.find(CostAdKoef.class, CostAdKoefId);
-            if (CostAdKoef != null) {
-                session.remove(CostAdKoef);
-            }
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        }
-    }
 
     public static void saveInflation(List<Inflation> Inflations) {
         Transaction transaction = null;
@@ -697,145 +415,5 @@ public class SQLiteMiner {
         }
     }
 
-    public static void saveOnlyCost(List<OnlyCost> OnlyCosts) {
-        Transaction transaction = null;
-        try (Session session = sessionFactory.openSession()){
-            transaction = session.beginTransaction();
-            for (OnlyCost OnlyCost :OnlyCosts) {
-                session.persist(OnlyCost);
-            }
-            transaction.commit();
-        } catch (Exception e) {
-            if(transaction != null){
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        }
-    }
-
-    public static void updateOnlyCost(OnlyCost OnlyCost) {
-        Transaction transaction = null;
-        try (Session session = sessionFactory.openSession()) {
-            transaction = session.beginTransaction();
-            session.merge(OnlyCost);
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        }
-    }
-
-    public static void deleteOnlyCost(int OnlyCostId) {
-        Transaction transaction = null;
-        try (Session session = sessionFactory.openSession()) {
-            transaction = session.beginTransaction();
-            OnlyCost OnlyCost = session.find(OnlyCost.class, OnlyCostId);
-            if (OnlyCost != null) {
-                session.remove(OnlyCost);
-            }
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        }
-    }
-
-    public static void saveNaturalAdProcent(List<NaturalAdProcent> NaturalAdProcents) {
-        Transaction transaction = null;
-        try (Session session = sessionFactory.openSession()){
-            transaction = session.beginTransaction();
-            for (NaturalAdProcent NaturalAdProcent :NaturalAdProcents) {
-                session.persist(NaturalAdProcent);
-            }
-            transaction.commit();
-        } catch (Exception e) {
-            if(transaction != null){
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        }
-    }
-
-    public static void updateNaturalAdProcent(NaturalAdProcent NaturalAdProcent) {
-        Transaction transaction = null;
-        try (Session session = sessionFactory.openSession()) {
-            transaction = session.beginTransaction();
-            session.merge(NaturalAdProcent);
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        }
-    }
-
-    public static void deleteNaturalAdProcent(int NaturalAdProcentId) {
-        Transaction transaction = null;
-        try (Session session = sessionFactory.openSession()) {
-            transaction = session.beginTransaction();
-            NaturalAdProcent NaturalAdProcent = session.find(NaturalAdProcent.class, NaturalAdProcentId);
-            if (NaturalAdProcent != null) {
-                session.remove(NaturalAdProcent);
-            }
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        }
-    }
-
-    public static void saveOnlyProcent(List<OnlyProcent> OnlyProcents) {
-        Transaction transaction = null;
-        try (Session session = sessionFactory.openSession()){
-            transaction = session.beginTransaction();
-            for (OnlyProcent OnlyProcent :OnlyProcents) {
-                session.persist(OnlyProcent);
-            }
-            transaction.commit();
-        } catch (Exception e) {
-            if(transaction != null){
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        }
-    }
-
-    public static void updateOnlyProcent(OnlyProcent OnlyProcent) {
-        Transaction transaction = null;
-        try (Session session = sessionFactory.openSession()) {
-            transaction = session.beginTransaction();
-            session.merge(OnlyProcent);
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        }
-    }
-
-    public static void deleteOnlyProcent(int OnlyProcentId) {
-        Transaction transaction = null;
-        try (Session session = sessionFactory.openSession()) {
-            transaction = session.beginTransaction();
-            OnlyProcent OnlyProcent = session.find(OnlyProcent.class, OnlyProcentId);
-            if (OnlyProcent != null) {
-                session.remove(OnlyProcent);
-            }
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        }
-    }
 
 }

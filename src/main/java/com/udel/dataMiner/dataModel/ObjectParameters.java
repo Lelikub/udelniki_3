@@ -16,7 +16,7 @@ public class ObjectParameters {
     @Column(name = "id")
     public int Id;
 
-    @Column(name = "name")
+    @Column(name = "item_name")
     public String Name;
 
     @Column(name = "description")

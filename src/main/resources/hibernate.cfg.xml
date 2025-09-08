@@ -21,7 +21,7 @@
         <property name="hibernate.format_sql">false</property>
 
         <!-- Drop and re-create the database schema on startup -->
-        <property name="hibernate.hbm2ddl.auto">create-drop</property> <!-- Use "update" in development -->
+        <property name="hibernate.hbm2ddl.auto">update</property> <!-- Use "update" in development -->
 
         <!-- Mention your annotated entity classes -->
         <mapping class="com.udel.dataMiner.dataModel.ObjectEntity"/>
@@ -30,13 +30,9 @@
         <mapping class="com.udel.dataMiner.dataModel.CalculationMethod"/>
         <mapping class="com.udel.dataMiner.dataModel.ObjectParameters"/>
         <mapping class="com.udel.dataMiner.dataModel.Mode"/>
-        <mapping class="com.udel.dataMiner.dataModel.Condition"/>
-        <mapping class="com.udel.dataMiner.dataModel.tabelsForCalc.costs.Inflation"/>
+<!--        <mapping class="com.udel.dataMiner.dataModel.Condition"/>-->
+        <mapping class="com.udel.dataMiner.dataModel.tablesForCalc.costs.Inflation"/>
+        <mapping class="com.udel.dataMiner.dataModel.ModelParameters"/>
 
-<!--        <mapping class="com.udel.dataMiner.dataModel.tabelsForCalc.costs.CostAdKoef"/>
-        <mapping class="com.udel.dataMiner.dataModel.tabelsForCalc.costs.Inflation"/>
-        <mapping class="com.udel.dataMiner.dataModel.tabelsForCalc.costs.OnlyCost"/>
-        <mapping class="com.udel.dataMiner.dataModel.tabelsForCalc.naturals.NaturalAdProcent"/>
-        <mapping class="com.udel.dataMiner.dataModel.tabelsForCalc.naturals.OnlyProcent"/>-->
     </session-factory>
 </hibernate-configuration>

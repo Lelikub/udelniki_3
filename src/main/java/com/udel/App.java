@@ -2,6 +2,7 @@ package com.udel;
 
 import java.util.*;
 
+import com.udel.calcMiner.CalculationClass;
 import com.udel.dataMiner.dataModel.enums.ConditionType;
 import com.udel.objectModel.ObjectLine;
 import com.udel.objectModel.ObjectModel;
@@ -11,23 +12,24 @@ public final class App {
     private App() {
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
         /// Данные из базы загружаются в память (при старте модели)
-        UdelConectionClass udelConnection = new UdelConectionClass();
+        CalculationClass calculationClass = new CalculationClass();
 
         /// Формируем входящие данные
         ObjectPlant plant1 = new ObjectPlant(1, "УСК");
-        plant1.addObjectModelParameter(1, 15.5);
-        ObjectLine line1 = new ObjectLine(2,"Линия 1",1, ConditionType.Work);
-        plant1.addObjectModelParameter(1, 10.5);
-        ObjectLine line2 = new ObjectLine(3,"Линия 2", 2, ConditionType.Work);
-        plant1.addObjectModelParameter(1, 12.5);
+        plant1.addObjectModelParameter(1, 100.);
+        ObjectLine line1 = new ObjectLine(2,"УСК Линия 1",2, ConditionType.Work);
+        line1.addObjectModelParameter(1, 10.);
+        ObjectLine line2 = new ObjectLine(3,"УСК Линия 2", 2, ConditionType.Work);
+        line2.addObjectModelParameter(1, 10.);
 
         Set<ObjectModel> objectParametersSet = Set.of(plant1,line1,line2);
 
-        int modelMonthNumber = 0;
+        int modelMonthNumber = 10;
 
-        udelConnection.UdelCalculationProvider(objectParametersSet, modelMonthNumber);
+        var result = calculationClass.StartAllCalculations(objectParametersSet, modelMonthNumber);
+        System.out.println(calculationClass.toString(result));
     }
 }

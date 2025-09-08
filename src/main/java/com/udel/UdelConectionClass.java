@@ -11,24 +11,13 @@ import com.udel.objectModel.ObjectPlant;
 
 public class UdelConectionClass {
     private DataTakerClass AllData = new DataTakerClass();
-    private Map<String, Object> DataMap = new HashMap<>();
     private Map<Integer, Map<String, Double>> ItemToCosts = new HashMap<>();
 
     public UdelConectionClass() {}
 
-    public void UdelCalculationProvider(Map<Integer, Object> IakData){
-        CalculationClass Callculate = new CalculationClass(IakData, DataMap);
-        ItemToCosts =  Callculate.StartAllCalculations();
-        System.out.println(Callculate.toString());
-    }
-    public String UdelCalculationProvider(Set<ObjectPlant> plantsFromIAK, Set<ObjectLine> linesFromIAK){
-        CalculationClass Callculate = new CalculationClass(plantsFromIAK,linesFromIAK, DataMap);
-        ItemToCosts =  Callculate.StartAllCalculations();
-        return (Callculate.toString());
-    }
-    public String UdelCalculationProvider(Set<ObjectModel> objectModels, Integer monthNumber){
-        CalculationClass Callculate = new CalculationClass();
-        //ItemToCosts =  Callculate.StartAllCalculations(objectModels, monthNumber);
-        return (Callculate.toString());
-    }
+//    public String UdelCalculationProvider(Set<ObjectModel> objectModels, Integer monthNumber){
+//        //CalculationClass Callculate = new CalculationClass(AllData);
+//        //ItemToCosts =  Callculate.StartAllCalculations(objectModels, monthNumber);
+//        //return (Callculate.toString());
+//    }
 }

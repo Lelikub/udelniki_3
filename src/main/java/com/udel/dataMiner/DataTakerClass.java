@@ -4,19 +4,12 @@ import java.util.*;
 
 import com.udel.dataMiner.dataModel.*;
 import com.udel.dataMiner.dataModel.enums.*;
-import com.udel.dataMiner.dataModel.tabelsForCalc.costs.CostAdKoef;
-import com.udel.dataMiner.dataModel.tabelsForCalc.costs.Inflation;
-import com.udel.dataMiner.dataModel.tabelsForCalc.costs.OnlyCost;
-import com.udel.dataMiner.dataModel.tabelsForCalc.naturals.NaturalAdProcent;
-import com.udel.dataMiner.dataModel.tabelsForCalc.naturals.OnlyProcent;
-
-import static com.udel.dataMiner.dataModel.enums.CalculationType.NaturalProcentCostKoef;
-import static com.udel.dataMiner.dataModel.enums.CalculationType.ParameterProcentCost;
+import com.udel.dataMiner.dataModel.tablesForCalc.costs.Inflation;
 
 public class DataTakerClass {
 
-    private List<ObjectEntity> Objects;
-    private List<ObjectParameters> ObjectParameters;
+    public List<ObjectEntity> Objects;
+    public List<ObjectParameters> ObjectParameters;
 
 
     public DataTakerClass(){
@@ -36,7 +29,12 @@ public class DataTakerClass {
         CalculationMethod method1 = new CalculationMethod(CalculationType.NaturalProcentCostKoef);
         CalculationMethod method2 = new CalculationMethod(CalculationType.ParameterProcentCost);
         CalculationMethod method3 = new CalculationMethod(CalculationType.ParameterCost);
-        SQLiteMiner.saveMethods(List.of(method1, method2, method3));
+        SQLiteMiner.saveEntities(List.of(method1, method2, method3));
+
+        ModelParameters mparam1 = new ModelParameters("ГСН на отопление");
+        ModelParameters mparam2 = new ModelParameters("Уровень загрузки");
+        ModelParameters mparam3 = new ModelParameters("Входящий поток");
+        SQLiteMiner.saveEntities(List.of(mparam1, mparam2, mparam3));
 
         ObjectEntity ysk = new ObjectEntity("УСК","Установка Стабилизации Конденсата",ObjectTypes.PLANT);
 
@@ -48,32 +46,19 @@ public class DataTakerClass {
         Item item3 = new Item("Вспомогательная Электроэнергия");
         Item item4 = new Item("Отопление");
 
-        SQLiteMiner.saveItems(List.of(item1, item2, item3, item4));
+        SQLiteMiner.saveEntities(List.of(item1, item2, item3, item4));
 
-        Map<Item, CalculationMethod> map = new HashMap<>();
-        map.put(item1, method1);
-        map.put(item2, method2);
-        ysk.addItems(map);
+        ItemsInObject itemsInObject1 = new ItemsInObject(ysk,item1,method1);
+        ItemsInObject itemsInObject2 = new ItemsInObject(ysk,item2,method2,mparam1);
+        ysk.setItemsInObjects(List.of(itemsInObject1,itemsInObject2));
 
-        map = new HashMap<>();
-        map.put(item3, method1);
-        map.put(item4, method3);
+        ItemsInObject itemsInObject3 = new ItemsInObject(line1,item3,method1);
+        ItemsInObject itemsInObject4 = new ItemsInObject(line1,item4,method3,mparam1);
+        line1.setItemsInObjects(List.of(itemsInObject3,itemsInObject4));
 
-        line1.addItems(map);
-
-        map = new HashMap<>();
-        map.put(item3, method1);
-        map.put(item4, method3);
-        line2.addItems(map);
-
-
-        Condition condition1 = new Condition("Work", "Режим работы", line1);
-        Condition condition2 = new Condition("Repair", "Режим ремонта", line1);
-        Condition condition3 = new Condition("TurnedOff", "Режим простоя", line1);
-
-        Condition condition4 = new Condition("Work", "Режим работы", line2);
-        Condition condition5 = new Condition("Repair", "Режим ремонта", line2);
-        Condition condition6 = new Condition("TurnedOff", "Режим простоя", line2);
+        ItemsInObject itemsInObject5 = new ItemsInObject(line2,item3,method1);
+        ItemsInObject itemsInObject6 = new ItemsInObject(line2,item4,method3,mparam1);
+        line2.setItemsInObjects(List.of(itemsInObject5,itemsInObject6));
 
         Mode mode1 = new Mode("ДК",line1);
         Mode mode2 = new Mode("СК(ДТ)",line1);
@@ -99,18 +84,6 @@ public class DataTakerClass {
         modes2.add(mode8);
         line2.addModes(modes2);
 
-        List<Condition> conditions1 = new ArrayList<>();
-        conditions1.add(condition1);
-        conditions1.add(condition2);
-        conditions1.add(condition3);
-        line1.addConditions(conditions1);
-
-        List<Condition> conditions2 = new ArrayList<>();
-        conditions2.add(condition4);
-        conditions2.add(condition5);
-        conditions2.add(condition6);
-        line2.addConditions(conditions2);
-
         SQLiteMiner.saveObjects(List.of(ysk, line1,line2));
         TestCalcSeedData(SQLiteMiner.getAllObjects());
 
@@ -135,14 +108,14 @@ public class DataTakerClass {
                             if (object.ObjectType == ObjectTypes.PLANT)
                                 objectParameters.add(new ObjectParameters(0, itemInObject.getItem().Name, object.Name + " " + i, _Plant_Elec_Natural, _Palnt_Elec_Proc[i], _Plant_Elec_Koef[i], _Plant_Elec_Cost));
                             else {
-                                for (Condition Cond : object.getConditionsInObjects()) {
-                                    if ("Работа".equals(Cond.Name)) {
+                                for (ConditionType Cond : ConditionType.values()) {
+                                    if ("Работа".equals(Cond.getDisplayName())) {
                                         for (Mode Mode : object.getModesInObjects()) {
-                                            objectParameters.add(new ObjectParameters(0, itemInObject.getItem().Name, object.Description + " " + Cond.Name + " " + Mode.Name + " " + i, _Plant_Elec_Rej_Natural, _Plant_Elec_Rej_Proc[i], _Plant_Elec_Koef[i], _Plant_Elec_Cost));
+                                            objectParameters.add(new ObjectParameters(0, itemInObject.getItem().Name, object.Description + " " + Cond.getDisplayName() + " " + Mode.Name + " " + i, _Plant_Elec_Rej_Natural, _Plant_Elec_Rej_Proc[i], _Plant_Elec_Koef[i], _Plant_Elec_Cost));
                                         }
 
-                                    } else if ("Простой".equals(Cond.Name) || "Ремонт".equals(Cond.Name)) {
-                                        objectParameters.add(new ObjectParameters(0, itemInObject.getItem().Name, object.Description + " " + Cond.Name + " " + i, 1, 0, _Plant_Elec_Koef[i], _Plant_Elec_Cost));
+                                    } else if ("Простой".equals(Cond.getDisplayName()) || "Ремонт".equals(Cond.getDisplayName())) {
+                                        objectParameters.add(new ObjectParameters(0, itemInObject.getItem().Name, object.Description + " " + Cond.getDisplayName() + " " + i, 1, 0, _Plant_Elec_Koef[i], _Plant_Elec_Cost));
                                     }
                                 }
                             }
@@ -156,14 +129,14 @@ public class DataTakerClass {
                         if (object.ObjectType == ObjectTypes.PLANT)
                             objectParameters.add(new ObjectParameters(0, itemInObject.getItem().Name, object.Name,500));
                         else {
-                            for (Condition Cond : object.getConditionsInObjects()) {
-                                if ("Работа".equals(Cond.Name)) {
+                            for (ConditionType Cond : ConditionType.values()) {
+                                if ("Работа".equals(Cond.getDisplayName())) {
                                     for (Mode Mode : object.getModesInObjects()) {
-                                        objectParameters.add(new ObjectParameters(0, itemInObject.getItem().Name, object.Description + " " + Cond.Name + " " + Mode.Name, 500));
+                                        objectParameters.add(new ObjectParameters(0, itemInObject.getItem().Name, object.Description + " " + Cond.getDisplayName() + " " + Mode.Name, 500));
                                     }
 
-                                } else if ("Простой".equals(Cond.Name) || "Ремонт".equals(Cond.Name)) {
-                                    objectParameters.add(new ObjectParameters(0, itemInObject.getItem().Name, object.Description + " " + Cond.Name, 500));
+                                } else if ("Простой".equals(Cond.getDisplayName()) || "Ремонт".equals(Cond.getDisplayName())) {
+                                    objectParameters.add(new ObjectParameters(0, itemInObject.getItem().Name, object.Description + " " + Cond.getDisplayName(), 500));
                                 }
                             }
                         }

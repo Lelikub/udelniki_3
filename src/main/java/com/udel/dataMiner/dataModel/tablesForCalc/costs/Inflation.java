@@ -1,4 +1,4 @@
-package com.udel.dataMiner.dataModel.tabelsForCalc.costs;
+package com.udel.dataMiner.dataModel.tablesForCalc.costs;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

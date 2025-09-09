@@ -6,6 +6,8 @@ import com.udel.dataMiner.dataModel.*;
 import com.udel.dataMiner.dataModel.enums.*;
 import com.udel.dataMiner.dataModel.tablesForCalc.costs.Inflation;
 
+import static com.udel.dataMiner.dataModel.enums.CalculationType.*;
+
 public class DataTakerClass {
 
     public List<ObjectEntity> Objects;
@@ -26,9 +28,9 @@ public class DataTakerClass {
 
     private void TestDataBaseSeed(){
 
-        CalculationMethod method1 = new CalculationMethod(CalculationType.NaturalProcentCostKoef);
-        CalculationMethod method2 = new CalculationMethod(CalculationType.ParameterProcentCost);
-        CalculationMethod method3 = new CalculationMethod(CalculationType.ParameterCost);
+        CalculationMethod method1 = new CalculationMethod(NaturalProcentCostKoef, NaturalProcentCostKoef.toString());
+        CalculationMethod method2 = new CalculationMethod(ParameterProcentCost,ParameterProcentCost.toString());
+        CalculationMethod method3 = new CalculationMethod(ParameterCost, ParameterCost.toString());
         SQLiteMiner.saveEntities(List.of(method1, method2, method3));
 
         ModelParameters mparam1 = new ModelParameters("ГСН на отопление");

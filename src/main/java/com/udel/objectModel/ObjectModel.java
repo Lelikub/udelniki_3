@@ -27,6 +27,11 @@ public abstract class ObjectModel {
     public void addObjectModelParameter(Integer parameter, Double value) {
         objectModelParameters.put(parameter,value);
     }
+
+    public Double getObjectModelParameter(Integer paramId){
+        return objectModelParameters.getOrDefault(paramId,0.0);
+    }
+
     public int getId() {
         return this.ID;
     }

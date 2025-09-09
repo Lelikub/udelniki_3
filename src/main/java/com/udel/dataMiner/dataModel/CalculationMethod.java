@@ -19,10 +19,19 @@ public class CalculationMethod {
     @Column(name = "method")
     private CalculationType type;
 
+    @Column(name = "description")
+    private String description;
+
     public CalculationMethod() {}
 
     public CalculationMethod(CalculationType type) {
         this.type = type;
+    }
+
+    public CalculationMethod(CalculationType type, String description)
+    {
+        this.type = type;
+        this.description=description;
     }
 
     public CalculationType getType() {

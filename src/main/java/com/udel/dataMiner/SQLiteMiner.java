@@ -51,14 +51,6 @@ public class SQLiteMiner {
         }
     }
 
-    public static Condition getConditionById(int id){
-        try(Session session = sessionFactory.openSession()){
-            return session.find(Condition.class, id);
-        }
-    }
-
-
-
     public static Inflation getInflationById(int id){
         try(Session session = sessionFactory.openSession()){
             return session.find(Inflation.class, id);
@@ -89,20 +81,6 @@ public class SQLiteMiner {
             return query.list();
         }
     }
-
-    public static List<Condition> getAllConditions(){
-        try(Session session = sessionFactory.openSession()){
-            CriteriaBuilder cb = session.getCriteriaBuilder();
-            CriteriaQuery<Condition> cq = cb.createQuery(Condition.class);
-            Root<Condition> rootEntry = cq.from(Condition.class);
-            CriteriaQuery<Condition> all = cq.select(rootEntry);
-
-            Query<Condition> query = session.createQuery(all);
-            return query.list();
-        }
-    }
-
-
 
     public static List<Inflation> getAllInflation(){
         try(Session session = sessionFactory.openSession()){
@@ -320,54 +298,6 @@ public class SQLiteMiner {
         }
     }
 
-    public static void saveCondition(Condition condition) {
-        Transaction transaction = null;
-        try (Session session = sessionFactory.openSession()) {
-            transaction = session.beginTransaction();
-            session.persist(condition);
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        }
-    }
-
-    public static void updateCondition(Condition condition) {
-        Transaction transaction = null;
-        try (Session session = sessionFactory.openSession()) {
-            transaction = session.beginTransaction();
-            session.merge(condition);
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        }
-    }
-
-    public static void deleteCondition(int conditionId) {
-        Transaction transaction = null;
-        try (Session session = sessionFactory.openSession()) {
-            transaction = session.beginTransaction();
-            Condition condition = session.find(Condition.class, conditionId); // Современный способ
-            if (condition != null) {
-                session.remove(condition);
-            }
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        }
-    }
-
-
-
-
     public static void saveInflation(List<Inflation> Inflations) {
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()){
@@ -414,6 +344,5 @@ public class SQLiteMiner {
             e.printStackTrace();
         }
     }
-
 
 }

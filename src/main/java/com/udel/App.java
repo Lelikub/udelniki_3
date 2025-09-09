@@ -29,7 +29,8 @@ public final class App {
 
         int modelMonthNumber = 10;
 
+        /// Вызываем расчёт и выводим результат в консоль
         var result = calculationClass.StartAllCalculations(objectParametersSet, modelMonthNumber);
-        System.out.println(calculationClass.toString(result));
+        System.out.println(calculationClass.toString(result, objectParametersSet));
     }
 }

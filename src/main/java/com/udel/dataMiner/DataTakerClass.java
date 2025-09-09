@@ -16,7 +16,7 @@ public class DataTakerClass {
 
     public DataTakerClass(){
         /// Заполнить базу данных
-        TestDataBaseSeed();
+        //TestDataBaseSeed();
         /// Получить все данные из бд
         DataTakerFromSQlite();
     }

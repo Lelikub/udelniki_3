@@ -1,6 +1,11 @@
 package com.udel;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import com.udel.calcMiner.CalculationClass;
 import com.udel.dataMiner.DataTakerClass;
@@ -21,12 +26,15 @@ public class UdelConectionClass {
 
     public UdelConectionClass() {}
 
-    public void UdelItitial(List<Integer> InitMass){
+    public void UdelItitial(List<Integer> InitMass, Set<Plant> plantsFromIAK){
         this.InitMass = InitMass;
         this.DataMap = AllData.ParsinById(this.InitMass);
+
+        this.plantsFromIAK = plantsFromIAK;
     }
 
-    public void UdelCalculationProvider(Map<Integer, Object> IakData){
+    public void UdelCalculationProvider(Map<Integer, Object> IakData, Set<Line> linesFromIAK){
+        this.linesFromIAK = linesFromIAK;
         CalculationClass Callculate = new CalculationClass(IakData, DataMap);
         ItemToCosts =  Callculate.StartAllCalculations();
         System.out.println(Callculate.toString());

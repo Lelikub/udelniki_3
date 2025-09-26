@@ -2,6 +2,7 @@ package com.udel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -51,8 +52,8 @@ public final class App {
 
         UdelConectionClass test = new UdelConectionClass();
 
-        test.UdelItitial(TestInitList);
+        test.UdelItitial(TestInitList,  new HashSet<>());
 
-        test.UdelCalculationProvider(TestParams);
+        test.UdelCalculationProvider(TestParams,  new HashSet<>());
     }
 }

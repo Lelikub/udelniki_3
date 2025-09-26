@@ -9,20 +9,14 @@ import java.util.Set;
 
 import com.udel.calcMiner.CalculationClass;
 import com.udel.dataMiner.DataTakerClass;
-import com.udel.objectModel.Line;
-import com.udel.objectModel.Plant;
+import com.udel.objectModel.ObjectLine;
+import com.udel.objectModel.ObjectPlant;
 
 public class UdelConectionClass {
     private DataTakerClass AllData = new DataTakerClass();
     private List<Integer> InitMass = new ArrayList<>();
     private Map<String, Object> DataMap = new HashMap<>();
     private Map<Integer, Map<String, Double>> ItemToCosts = new HashMap<>();
-
-    /**
-     * На вход модуля будут поступать два Set с наборами установок и линий
-     */
-    private Set<Plant> plantsFromIAK = new HashSet<>();
-    private Set<Line> linesFromIAK = new HashSet<>();
 
     public UdelConectionClass() {}
 
@@ -38,5 +32,10 @@ public class UdelConectionClass {
         CalculationClass Callculate = new CalculationClass(IakData, DataMap);
         ItemToCosts =  Callculate.StartAllCalculations();
         System.out.println(Callculate.toString());
+    }
+    public String UdelCalculationProvider(Set<ObjectPlant> plantsFromIAK, Set<ObjectLine> linesFromIAK){
+        CalculationClass Callculate = new CalculationClass(plantsFromIAK,linesFromIAK, DataMap);
+        ItemToCosts =  Callculate.StartAllCalculations();
+        return (Callculate.toString());
     }
 }

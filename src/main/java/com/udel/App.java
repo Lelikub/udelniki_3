@@ -47,7 +47,7 @@ public final class App {
         for (CostParameter Param : UskParams) {
             System.out.println(Param.toString());
         }
-        
+
         TestParams.put(1, UskParams);
 
         UdelConectionClass test = new UdelConectionClass();

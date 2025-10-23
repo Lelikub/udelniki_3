@@ -1,12 +1,21 @@
 package com.udel.dataMiner;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-import com.udel.dataMiner.dataModel.*;
-import com.udel.dataMiner.dataModel.enums.*;
+import com.udel.dataMiner.dataModel.CalculationMethod;
+import com.udel.dataMiner.dataModel.Item;
+import com.udel.dataMiner.dataModel.ItemsInObject;
+import com.udel.dataMiner.dataModel.Mode;
+import com.udel.dataMiner.dataModel.ModelParameters;
+import com.udel.dataMiner.dataModel.ObjectEntity;
+import com.udel.dataMiner.dataModel.ObjectParameters;
+import static com.udel.dataMiner.dataModel.enums.CalculationType.NaturalProcentCostKoef;
+import static com.udel.dataMiner.dataModel.enums.CalculationType.ParameterCost;
+import static com.udel.dataMiner.dataModel.enums.CalculationType.ParameterProcentCost;
+import com.udel.dataMiner.dataModel.enums.ConditionType;
+import com.udel.dataMiner.dataModel.enums.ObjectTypes;
 import com.udel.dataMiner.dataModel.tablesForCalc.costs.Inflation;
-
-import static com.udel.dataMiner.dataModel.enums.CalculationType.*;
 
 public class DataTakerClass {
 
@@ -16,7 +25,7 @@ public class DataTakerClass {
 
     public DataTakerClass(){
         /// Заполнить базу данных
-        //TestDataBaseSeed();
+        TestDataBaseSeed();
         /// Получить все данные из бд
         DataTakerFromSQlite();
     }

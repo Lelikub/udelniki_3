@@ -3,6 +3,7 @@ package com.udel;
 import java.util.Set;
 
 import com.udel.calcMiner.CalculationClass;
+import com.udel.dataFromIAK.ClassCostFromIAK;
 import com.udel.dataMiner.DataSeaderClass;
 import com.udel.dataMiner.dataModel.enums.ConditionType;
 import com.udel.objectModel.ObjectLine;
@@ -24,6 +25,9 @@ public final class App {
         CalculationClass calculationClass = new CalculationClass();
 
         /// Формируем входящие данные
+        ClassCostFromIAK GSNcost = new ClassCostFromIAK();
+        GSNcost.setName("GSN");
+        GSNcost.setCost(500.);
         ObjectPlant plant1 = new ObjectPlant(1, "УСК");
         plant1.addObjectModelParameter(1, 100.);
         ObjectLine line1 = new ObjectLine(2,"УСК Линия 1",0, ConditionType.Work);

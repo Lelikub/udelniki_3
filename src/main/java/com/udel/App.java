@@ -1,8 +1,9 @@
 package com.udel;
 
-import java.util.*;
+import java.util.Set;
 
 import com.udel.calcMiner.CalculationClass;
+import com.udel.dataMiner.DataSeaderClass;
 import com.udel.dataMiner.dataModel.enums.ConditionType;
 import com.udel.objectModel.ObjectLine;
 import com.udel.objectModel.ObjectModel;
@@ -28,7 +29,10 @@ public final class App {
         Set<ObjectModel> objectParametersSet = Set.of(plant1,line1,line2);
 
         int modelMonthNumber = 10;
-
+        ///Заполняем базу данными
+        DataSeaderClass Seader = new DataSeaderClass();
+        Seader.InitMethod();
+        Seader.uskSeader();
         /// Вызываем расчёт и выводим результат в консоль
         var result = calculationClass.StartAllCalculations(objectParametersSet, modelMonthNumber);
         System.out.println(calculationClass.toString(result, objectParametersSet));

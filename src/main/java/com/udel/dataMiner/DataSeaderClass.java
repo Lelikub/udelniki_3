@@ -94,10 +94,10 @@ public class DataSeaderClass {
         line2.addModes(modes2);
 
         SQLiteMiner.saveObjects(List.of(ysk, line1,line2));
-        TestCalcSeedData(List.of(ysk, line1,line2));
+        uskCalcSeedData(List.of(ysk, line1,line2));
     }
     
-     private void TestCalcSeedData(List<ObjectEntity> Objects){
+     private void uskCalcSeedData(List<ObjectEntity> Objects){
         double[] _Palnt_Elec_Proc = {0.98, 0.8, 0.89, 0.96, 0.72, 0.87, 0.86, 0.92, 0.89, 1, 0.71, 0.78};
         double[] _Plant_Elec_Koef = {0.95, 0.98, 0.97, 0.97, 0.97, 0.98, 1, 1.02, 1.07, 1.03, 1.03, 1.03};
         double[] _Plant_Elec_Rej_Proc= {0.58, 0.58, 1, 1, 1, 1, 1, 1, 1, 1, 0.58, 0.58};

@@ -100,7 +100,7 @@ public class DataSeaderClass {
      private void uskCalcSeedData(List<ObjectEntity> Objects){
         double[] _Palnt_Elec_Proc = {1.040, 1.040, 1.152, 1.040, 1.075, 0.799, 0.825, 0.799, 1.040, 1.075, 1.040, 1.075};
         double[] _Plant_Elec_Koef = {0.95, 0.98, 0.97, 0.97, 0.97, 0.98, 1, 1.02, 1.06, 1.03, 1.03, 1.03};
-        double[] _Plant_Elec_Rej_Proc= {0.58, 0.58, 1, 1, 1, 1, 1, 1, 1, 1, 0.58, 0.58};
+        double[] _Plant_Elec_Rej_Proc= {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
         double _Plant_Elec_Cost = 6.21;
         double _Plant_Elec_Natural = 66.42;
         double _Plant_Elec_DK_Natural = 40;

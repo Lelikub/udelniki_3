@@ -9,6 +9,7 @@ import com.udel.dataMiner.dataModel.Mode;
 import com.udel.dataMiner.dataModel.ModelParameters;
 import com.udel.dataMiner.dataModel.ObjectEntity;
 import com.udel.dataMiner.dataModel.ObjectParameters;
+import static com.udel.dataMiner.dataModel.enums.CalculationType.JustCost;
 import static com.udel.dataMiner.dataModel.enums.CalculationType.NaturalProcentCostKoef;
 import static com.udel.dataMiner.dataModel.enums.CalculationType.ParameterCost;
 import static com.udel.dataMiner.dataModel.enums.CalculationType.ParameterProcentCost;
@@ -21,6 +22,7 @@ public class DataSeaderClass {
     CalculationMethod method1;
     CalculationMethod method2;
     CalculationMethod method3;
+    CalculationMethod method4;
     ModelParameters mparam1;
     ModelParameters mparam2;
     ModelParameters mparam3;
@@ -28,12 +30,14 @@ public class DataSeaderClass {
     Item item2;
     Item item3;
     Item item4;
+    Item item5;
 
 
     public DataSeaderClass() {
         this.method1 = new CalculationMethod(NaturalProcentCostKoef);
         this.method2 = new CalculationMethod(ParameterProcentCost);
         this.method3 = new CalculationMethod(ParameterCost);
+        this.method4 = new CalculationMethod(JustCost);
         this.mparam1 = new ModelParameters("ГСН");
         this.mparam2 = new ModelParameters("Уровень загрузки");
         this.mparam3 = new ModelParameters("Входящий поток");
@@ -41,14 +45,15 @@ public class DataSeaderClass {
         this.item2 = new Item("ГСН");
         this.item3 = new Item("Вспомогательная Электроэнергия");
         this.item4 = new Item("Отопление");
+        this.item5 = new Item("Прочие");
     }
 
     public void InitMethod(){
-        SQLiteMiner.saveEntities(List.of(method1, method2, method3));
+        SQLiteMiner.saveEntities(List.of(method1, method2, method3, method4));
 
         SQLiteMiner.saveEntities(List.of(mparam1, mparam2, mparam3));
 
-        SQLiteMiner.saveEntities(List.of(item1, item2, item3, item4));
+        SQLiteMiner.saveEntities(List.of(item1, item2, item3, item4, item5));
     }
 
     public void uskSeader(){
@@ -58,8 +63,9 @@ public class DataSeaderClass {
         ObjectEntity line2 = new ObjectEntity("Линия 2","УСК Линия 2",ObjectTypes.LINE, ysk);
 
         ItemsInObject itemsInObject1 = new ItemsInObject(ysk,item3,method1);
-        ItemsInObject itemsInObject2 = new ItemsInObject(ysk,item4,method2,mparam1);
-        ysk.setItemsInObjects(List.of(itemsInObject1,itemsInObject2));
+        ItemsInObject itemsInObject2 = new ItemsInObject(ysk,item4,method2, mparam1);
+        ItemsInObject itemsInObject7 = new ItemsInObject(ysk, item5, method4);
+        ysk.setItemsInObjects(List.of(itemsInObject1,itemsInObject2, itemsInObject7));
 
         ItemsInObject itemsInObject3 = new ItemsInObject(line1,item1,method1);
         ItemsInObject itemsInObject4 = new ItemsInObject(line1,item2,method3,mparam1);
@@ -101,10 +107,12 @@ public class DataSeaderClass {
         double[] _Palnt_Elec_Proc = {1.040, 1.040, 1.152, 1.040, 1.075, 0.799, 0.825, 0.799, 1.040, 1.075, 1.040, 1.075};
         double[] _Plant_Elec_Koef = {0.95, 0.98, 0.97, 0.97, 0.97, 0.98, 1, 1.02, 1.06, 1.03, 1.03, 1.03};
         double[] _Plant_Elec_Rej_Proc= {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+        /// Все затраты денежные или натуральные отражены за час
         double _Plant_Elec_Cost = 6.21;
         double _Plant_Elec_Natural = 66.42;
         double _Plant_Elec_DK_Natural = 40;
         double _Plant_Elec_SK_Natural = 257;
+        double _Plant_Prochie_Cost = 19721.12;
 
         List<ObjectParameters> objectParameters = new ArrayList<>();
         List<Inflation> inflations = new ArrayList<>();
@@ -139,7 +147,8 @@ public class DataSeaderClass {
                         break;
                     case ParameterCost:
                         if (object.ObjectType == ObjectTypes.PLANT)
-                            objectParameters.add(new ObjectParameters(0, itemInObject.getItem().Name, object.Name,500));
+                                objectParameters.add(new ObjectParameters(0, itemInObject.getItem().Name, object.Name, 500));
+                        
                         else {
                             for (ConditionType Cond : ConditionType.values()) {
                                 if ("Работа".equals(Cond.getDisplayName())) {
@@ -153,6 +162,9 @@ public class DataSeaderClass {
                             }
                         }
                         break;
+                    case JustCost:
+                        if (object.ObjectType == ObjectTypes.PLANT)
+                            objectParameters.add(new ObjectParameters(0, itemInObject.getItem().Name, object.Name, _Plant_Prochie_Cost));
                     default:
                         break;
                 }

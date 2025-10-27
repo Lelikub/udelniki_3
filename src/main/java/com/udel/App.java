@@ -26,9 +26,9 @@ public final class App {
         /// Формируем входящие данные
         ObjectPlant plant1 = new ObjectPlant(1, "УСК");
         plant1.addObjectModelParameter(1, 100.);
-        ObjectLine line1 = new ObjectLine(2,"УСК Линия 1",2, ConditionType.Work);
+        ObjectLine line1 = new ObjectLine(2,"УСК Линия 1",0, ConditionType.Work);
         line1.addObjectModelParameter(1, 10.);
-        ObjectLine line2 = new ObjectLine(3,"УСК Линия 2", 2, ConditionType.Work);
+        ObjectLine line2 = new ObjectLine(3,"УСК Линия 2", 3, ConditionType.Work);
         line2.addObjectModelParameter(1, 10.);
 
         Set<ObjectModel> objectParametersSet = Set.of(plant1,line1,line2);

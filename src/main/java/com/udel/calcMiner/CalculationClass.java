@@ -1,9 +1,15 @@
 package com.udel.calcMiner;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 
 import com.udel.dataMiner.DataTakerClass;
-import com.udel.dataMiner.dataModel.*;
+import com.udel.dataMiner.dataModel.ItemsInObject;
+import com.udel.dataMiner.dataModel.ObjectEntity;
+import com.udel.dataMiner.dataModel.ObjectParameters;
 import com.udel.dataMiner.dataModel.enums.CalculationType;
 import com.udel.dataMiner.dataModel.enums.ConditionType;
 import com.udel.objectModel.ObjectLine;
@@ -38,6 +44,7 @@ public class CalculationClass {
                     case NaturalProcentCostKoef -> calculateNaturalProcentCostKoef(objectModel, objectEntity, itemsInObject, monthNumber);
                     case ParameterProcentCost   -> calculateParameterProcentCost(objectModel, objectEntity, itemsInObject);
                     case ParameterCost          -> calculateParameterCost(objectModel, objectEntity, itemsInObject, monthNumber);
+                    case JustCost               -> calculateJustCost(objectModel, objectEntity, itemsInObject, monthNumber);
                 };
                 itemCosts.put(itemsInObject.getItem().Name, cost);
             }
@@ -79,6 +86,15 @@ public class CalculationClass {
         return parameter * params.Cost;
     }
 
+    /// Четвертый метод расчета
+    private double calculateJustCost(ObjectModel objectModel, ObjectEntity objectEntity, ItemsInObject itemsInObject, int monthNumber)
+    {
+        String description = buildDescription(objectModel, objectEntity, monthNumber, CalculationType.JustCost);
+        ObjectParameters params = findParameters(itemsInObject.getItem().Name, description);
+
+        return 1 * params.Cost;
+    }
+
     /// Строим описание для дальнейшего поиска параметров в бд
     public String buildDescription(ObjectModel objectModel, ObjectEntity objectEntity, Integer monthNumber, CalculationType calculationType)
     {
@@ -106,6 +122,11 @@ public class CalculationClass {
                         return (line.getName() + " " + line.getConditionType());
                 }
                 break;
+            case JustCost:
+                if (objectModel instanceof ObjectPlant plant)
+                {
+                    return plant.getName();
+                }
         }
         return "";
     }

@@ -94,16 +94,17 @@ public class DataSeaderClass {
         line2.addModes(modes2);
 
         SQLiteMiner.saveObjects(List.of(ysk, line1,line2));
-        uskCalcSeedData(List.of(ysk, line1,line2));
+        uskCalcSeedData(List.of(ysk, line1, line2));
     }
     
      private void uskCalcSeedData(List<ObjectEntity> Objects){
-        double[] _Palnt_Elec_Proc = {0.98, 0.8, 0.89, 0.96, 0.72, 0.87, 0.86, 0.92, 0.89, 1, 0.71, 0.78};
-        double[] _Plant_Elec_Koef = {0.95, 0.98, 0.97, 0.97, 0.97, 0.98, 1, 1.02, 1.07, 1.03, 1.03, 1.03};
+        double[] _Palnt_Elec_Proc = {1.040, 1.040, 1.152, 1.040, 1.075, 0.799, 0.825, 0.799, 1.040, 1.075, 1.040, 1.075};
+        double[] _Plant_Elec_Koef = {0.95, 0.98, 0.97, 0.97, 0.97, 0.98, 1, 1.02, 1.06, 1.03, 1.03, 1.03};
         double[] _Plant_Elec_Rej_Proc= {0.58, 0.58, 1, 1, 1, 1, 1, 1, 1, 1, 0.58, 0.58};
         double _Plant_Elec_Cost = 6.21;
-        double _Plant_Elec_Natural = 65.76;
-        double _Plant_Elec_Rej_Natural = 257;
+        double _Plant_Elec_Natural = 66.42;
+        double _Plant_Elec_DK_Natural = 40;
+        double _Plant_Elec_SK_Natural = 257;
 
         List<ObjectParameters> objectParameters = new ArrayList<>();
         List<Inflation> inflations = new ArrayList<>();
@@ -119,7 +120,10 @@ public class DataSeaderClass {
                                 for (ConditionType Cond : ConditionType.values()) {
                                     if ("Работа".equals(Cond.getDisplayName())) {
                                         for (Mode Mode : object.getModesInObjects()) {
-                                            objectParameters.add(new ObjectParameters(0, itemInObject.getItem().Name, object.Description + " " + Cond.getDisplayName() + " " + Mode.Name + " " + i, _Plant_Elec_Rej_Natural, _Plant_Elec_Rej_Proc[i], _Plant_Elec_Koef[i], _Plant_Elec_Cost));
+                                            if(Mode.Name.equals("ДК"))
+                                                objectParameters.add(new ObjectParameters(0, itemInObject.getItem().Name, object.Description + " " + Cond.getDisplayName() + " " + Mode.Name + " " + i, _Plant_Elec_DK_Natural, _Plant_Elec_Rej_Proc[i], _Plant_Elec_Koef[i], _Plant_Elec_Cost));
+                                            else
+                                                objectParameters.add(new ObjectParameters(0, itemInObject.getItem().Name, object.Description + " " + Cond.getDisplayName() + " " + Mode.Name + " " + i, _Plant_Elec_SK_Natural, _Plant_Elec_Rej_Proc[i], _Plant_Elec_Koef[i], _Plant_Elec_Cost));
                                         }
 
                                     } else if ("Простой".equals(Cond.getDisplayName()) || "Ремонт".equals(Cond.getDisplayName())) {

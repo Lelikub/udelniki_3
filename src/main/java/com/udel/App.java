@@ -15,6 +15,11 @@ public final class App {
 
     public static void main(String[] args) throws Exception {
 
+        ///Заполняем базу данными
+        DataSeaderClass Seader = new DataSeaderClass();
+        Seader.InitMethod();
+        Seader.uskSeader();
+
         /// Данные из базы загружаются в память (при старте модели)
         CalculationClass calculationClass = new CalculationClass();
 
@@ -29,10 +34,7 @@ public final class App {
         Set<ObjectModel> objectParametersSet = Set.of(plant1,line1,line2);
 
         int modelMonthNumber = 10;
-        ///Заполняем базу данными
-        DataSeaderClass Seader = new DataSeaderClass();
-        Seader.InitMethod();
-        Seader.uskSeader();
+
         /// Вызываем расчёт и выводим результат в консоль
         var result = calculationClass.StartAllCalculations(objectParametersSet, modelMonthNumber);
         System.out.println(calculationClass.toString(result, objectParametersSet));

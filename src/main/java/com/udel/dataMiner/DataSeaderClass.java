@@ -34,7 +34,7 @@ public class DataSeaderClass {
         this.method1 = new CalculationMethod(NaturalProcentCostKoef);
         this.method2 = new CalculationMethod(ParameterProcentCost);
         this.method3 = new CalculationMethod(ParameterCost);
-        this.mparam1 = new ModelParameters("ГСН на отопление");
+        this.mparam1 = new ModelParameters("ГСН");
         this.mparam2 = new ModelParameters("Уровень загрузки");
         this.mparam3 = new ModelParameters("Входящий поток");
         this.item1 = new Item("Технологическая Электроэнергия");
@@ -57,16 +57,16 @@ public class DataSeaderClass {
         ObjectEntity line1 = new ObjectEntity("Линия 1","УСК Линия 1",ObjectTypes.LINE, ysk);
         ObjectEntity line2 = new ObjectEntity("Линия 2","УСК Линия 2",ObjectTypes.LINE, ysk);
 
-        ItemsInObject itemsInObject1 = new ItemsInObject(ysk,item1,method1);
-        ItemsInObject itemsInObject2 = new ItemsInObject(ysk,item2,method2,mparam1);
+        ItemsInObject itemsInObject1 = new ItemsInObject(ysk,item3,method1);
+        ItemsInObject itemsInObject2 = new ItemsInObject(ysk,item4,method2,mparam1);
         ysk.setItemsInObjects(List.of(itemsInObject1,itemsInObject2));
 
-        ItemsInObject itemsInObject3 = new ItemsInObject(line1,item3,method1);
-        ItemsInObject itemsInObject4 = new ItemsInObject(line1,item4,method3,mparam1);
+        ItemsInObject itemsInObject3 = new ItemsInObject(line1,item1,method1);
+        ItemsInObject itemsInObject4 = new ItemsInObject(line1,item2,method3,mparam1);
         line1.setItemsInObjects(List.of(itemsInObject3,itemsInObject4));
 
-        ItemsInObject itemsInObject5 = new ItemsInObject(line2,item3,method1);
-        ItemsInObject itemsInObject6 = new ItemsInObject(line2,item4,method3,mparam1);
+        ItemsInObject itemsInObject5 = new ItemsInObject(line2,item1,method1);
+        ItemsInObject itemsInObject6 = new ItemsInObject(line2,item2,method3,mparam1);
         line2.setItemsInObjects(List.of(itemsInObject5,itemsInObject6));
 
         Mode mode1 = new Mode("ДК",line1);

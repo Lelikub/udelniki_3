@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
+import com.udel.dataFromIAK.ClassCostFromIAK;
 import com.udel.dataMiner.DataTakerClass;
 import com.udel.dataMiner.dataModel.ItemsInObject;
 import com.udel.dataMiner.dataModel.ObjectEntity;
@@ -19,11 +20,16 @@ import com.udel.objectModel.ObjectPlant;
 public class CalculationClass {
 
     private DataTakerClass AllData = new DataTakerClass();
+    private ClassCostFromIAK userData = new ClassCostFromIAK();
 
     public CalculationClass(){
     }
 
-    public Map<Integer, Map<String, Double>> StartAllCalculations(Set<ObjectModel> objectModels, Integer monthNumber) throws Exception {
+    public void setUserData(ClassCostFromIAK data){
+        this.userData = data;
+    }
+
+    public Map<Integer, Map<String, Double>> StartAllCalculations(Set<ObjectModel> objectModels,Integer monthNumber) throws Exception {
 
         Map<Integer, Map<String, Double>> itemsAndCosts = new HashMap<>();
 
@@ -54,11 +60,11 @@ public class CalculationClass {
     }
 
     ///  Первый метод расчёта
-    private double calculateNaturalProcentCostKoef(ObjectModel objectModel, ObjectEntity objectEntity,
-                                                   ItemsInObject itemsInObject, int monthNumber)
+    private double calculateNaturalProcentCostKoef(ObjectModel objectModel, ObjectEntity objectEntity, ItemsInObject itemsInObject, int monthNumber)
     {
         String description = buildDescription(objectModel, objectEntity, monthNumber, CalculationType.NaturalProcentCostKoef);
         ObjectParameters params = findParameters(itemsInObject.getItem().Name, description);
+        params = InputByUser(params, userData);
 
         return params.Natural * params.Procent * params.Cost * params.Koef;
     }
@@ -70,6 +76,8 @@ public class CalculationClass {
 
         double parameter = Optional.ofNullable(itemsInObject.getParameter1())
             .map(p->objectModel.getObjectModelParameter(p.Id)).orElse(0.0);
+        params = InputByUser(params, userData);
+        
 
         return parameter * params.Procent * params.Cost;
     }
@@ -82,6 +90,7 @@ public class CalculationClass {
 
         double parameter = Optional.ofNullable(itemsInObject.getParameter1())
             .map(p->objectModel.getObjectModelParameter(p.Id)).orElse(0.0);
+        params = InputByUser(params, userData);
 
         return parameter * params.Cost;
     }
@@ -91,6 +100,7 @@ public class CalculationClass {
     {
         String description = buildDescription(objectModel, objectEntity, monthNumber, CalculationType.JustCost);
         ObjectParameters params = findParameters(itemsInObject.getItem().Name, description);
+        params = InputByUser(params, userData);
 
         return 1 * params.Cost;
     }
@@ -138,6 +148,16 @@ public class CalculationClass {
             .findFirst()
             .orElseThrow(() -> new IllegalStateException("Не найдены параметры для " + name + " - " + description));
     }
+
+    private ObjectParameters InputByUser(ObjectParameters param, ClassCostFromIAK SomeCost){
+        if(param.Name.equals("ГСН") || param.Name.equals("Отопление")){
+            param.Cost = SomeCost.getCost();
+            return param;
+        }
+        else
+            return param;
+        
+    } 
 
     public String toString(Map<Integer, Map<String, Double>> itemsAndCosts, Set<ObjectModel> objectModels) {
         StringBuilder sb = new StringBuilder();

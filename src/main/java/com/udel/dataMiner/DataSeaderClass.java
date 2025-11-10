@@ -105,13 +105,15 @@ public class DataSeaderClass {
     
      private void uskCalcSeedData(List<ObjectEntity> Objects){
         double[] _Palnt_Elec_Proc = {1.040, 1.040, 1.152, 1.040, 1.075, 0.799, 0.825, 0.799, 1.040, 1.075, 1.040, 1.075};
-        double[] _Plant_Elec_Koef = {0.95, 0.98, 0.97, 0.97, 0.97, 0.98, 1, 1.02, 1.06, 1.03, 1.03, 1.03};
+        //double[] _Plant_Elec_Koef = {0.95, 0.98, 0.97, 0.97, 0.97, 0.98, 1, 1.02, 1.06, 1.03, 1.03, 1.03};
+        double[] _Plant_Elec_Koef = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
         double[] _Plant_Elec_Rej_Proc= {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+        double[] _Plant_Elec_Rej_Proc_SK = {0.783425366, 0.751055998, 1.359331914, 1.13692281, 0.912785544, 1.027693187, 1.057472131, 1.013998592, 1.129483022, 1.225992443, 0.773231707, 0.828607287};
         /// Все затраты денежные или натуральные отражены за час
         double _Plant_Elec_Cost = 6.21;
         double _Plant_Elec_Natural = 66.42;
-        double _Plant_Elec_DK_Natural = 40;
-        double _Plant_Elec_SK_Natural = 257;
+        double _Plant_Elec_DK_Natural = 40 + 12.8486;
+        double _Plant_Elec_SK_Natural =263.9417482;
         double _Plant_Prochie_Cost = 19721.12;
 
         List<ObjectParameters> objectParameters = new ArrayList<>();
@@ -129,13 +131,13 @@ public class DataSeaderClass {
                                     if ("Работа".equals(Cond.getDisplayName())) {
                                         for (Mode Mode : object.getModesInObjects()) {
                                             if(Mode.Name.equals("ДК"))
-                                                objectParameters.add(new ObjectParameters(0, itemInObject.getItem().Name, object.Description + " " + Cond.getDisplayName() + " " + Mode.Name + " " + i, _Plant_Elec_DK_Natural, _Plant_Elec_Rej_Proc[i], _Plant_Elec_Koef[i], _Plant_Elec_Cost));
+                                                objectParameters.add(new ObjectParameters(0, itemInObject.getItem().Name, object.Description + " " + Cond.getDisplayName() + " " + Mode.Name + " " + i, _Plant_Elec_DK_Natural, _Plant_Elec_Rej_Proc[i], _Plant_Elec_Cost, _Plant_Elec_Koef[i]));
                                             else
-                                                objectParameters.add(new ObjectParameters(0, itemInObject.getItem().Name, object.Description + " " + Cond.getDisplayName() + " " + Mode.Name + " " + i, _Plant_Elec_SK_Natural, _Plant_Elec_Rej_Proc[i], _Plant_Elec_Koef[i], _Plant_Elec_Cost));
+                                                objectParameters.add(new ObjectParameters(0, itemInObject.getItem().Name, object.Description + " " + Cond.getDisplayName() + " " + Mode.Name + " " + i, _Plant_Elec_SK_Natural, _Plant_Elec_Rej_Proc_SK[i], _Plant_Elec_Cost , _Plant_Elec_Koef[i]));
                                         }
 
                                     } else if ("Простой".equals(Cond.getDisplayName()) || "Ремонт".equals(Cond.getDisplayName())) {
-                                        objectParameters.add(new ObjectParameters(0, itemInObject.getItem().Name, object.Description + " " + Cond.getDisplayName() + " " + i, 1, 0, _Plant_Elec_Koef[i], _Plant_Elec_Cost));
+                                        objectParameters.add(new ObjectParameters(0, itemInObject.getItem().Name, object.Description + " " + Cond.getDisplayName() + " " + i, 1, 0, _Plant_Elec_Cost,_Plant_Elec_Koef[i]));
                                     }
                                 }
                             }

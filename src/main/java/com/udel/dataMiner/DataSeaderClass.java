@@ -108,12 +108,12 @@ public class DataSeaderClass {
         //double[] _Plant_Elec_Koef = {0.95, 0.98, 0.97, 0.97, 0.97, 0.98, 1, 1.02, 1.06, 1.03, 1.03, 1.03};
         double[] _Plant_Elec_Koef = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
         double[] _Plant_Elec_Rej_Proc= {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
-        double[] _Plant_Elec_Rej_Proc_SK = {0.783425366, 0.751055998, 1.359331914, 1.13692281, 0.912785544, 1.027693187, 1.057472131, 1.013998592, 1.129483022, 1.225992443, 0.773231707, 0.828607287};
+        double[] _Plant_Elec_Rej_Proc_SK = {0.783479465, 0.751108484, 1.3592962, 1.136894241, 0.912779093, 1.027657807, 1.057433547, 1.013976584, 1.12945527, 1.225960681, 0.773289003, 0.828669627};
         /// Все затраты денежные или натуральные отражены за час
         double _Plant_Elec_Cost = 6.21;
         double _Plant_Elec_Natural = 66.42;
         double _Plant_Elec_DK_Natural = 40 + 12.8486;
-        double _Plant_Elec_SK_Natural =263.9417482;
+        double _Plant_Elec_SK_Natural =263.9189668;
         double _Plant_Prochie_Cost = 19721.12;
 
         List<ObjectParameters> objectParameters = new ArrayList<>();
@@ -145,21 +145,21 @@ public class DataSeaderClass {
                         break;
                     case ParameterProcentCost:
                             if (object.ObjectType == ObjectTypes.PLANT)
-                                objectParameters.add(new ObjectParameters(0, itemInObject.getItem().Name, object.Name, 0.05, 500));
+                                objectParameters.add(new ObjectParameters(0, itemInObject.getItem().Name, object.Name, 0.06, 495));
                         break;
                     case ParameterCost:
                         if (object.ObjectType == ObjectTypes.PLANT)
-                                objectParameters.add(new ObjectParameters(0, itemInObject.getItem().Name, object.Name, 500));
+                                objectParameters.add(new ObjectParameters(0, itemInObject.getItem().Name, object.Name, 495));
                         
                         else {
                             for (ConditionType Cond : ConditionType.values()) {
                                 if ("Работа".equals(Cond.getDisplayName())) {
                                     for (Mode Mode : object.getModesInObjects()) {
-                                        objectParameters.add(new ObjectParameters(0, itemInObject.getItem().Name, object.Description + " " + Cond.getDisplayName() + " " + Mode.Name, 500));
+                                        objectParameters.add(new ObjectParameters(0, itemInObject.getItem().Name, object.Description + " " + Cond.getDisplayName() + " " + Mode.Name, 495));
                                     }
 
                                 } else if ("Простой".equals(Cond.getDisplayName()) || "Ремонт".equals(Cond.getDisplayName())) {
-                                    objectParameters.add(new ObjectParameters(0, itemInObject.getItem().Name, object.Description + " " + Cond.getDisplayName(), 500));
+                                    objectParameters.add(new ObjectParameters(0, itemInObject.getItem().Name, object.Description + " " + Cond.getDisplayName(), 495));
                                 }
                             }
                         }
